@@ -35,6 +35,5 @@
             "destination": "/cambench/",
             "permanent": false
         }
-    ],
-    "trailingSlash": true
+    ]
 }
