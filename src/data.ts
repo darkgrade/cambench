@@ -17,7 +17,7 @@ export const BENCH = {
 /** The overview's tabs; each after the first is its own page at BENCH.path + id. */
 export const TABS = [
     { id: 'cameras', label: 'Cameras' },
-    { id: 'value', label: 'Spec level vs. price' },
+    { id: 'spec-level', label: 'Spec level' },
     { id: 'method', label: 'How we verify' },
 ]
 
@@ -122,6 +122,10 @@ export function embeddedDetail(): CameraDetail | undefined {
 export const picture = (path: string | undefined): string | undefined => (path ? `${BENCH.path}${path}` : undefined)
 export const price = (value: number | null | undefined): string => (value === null || value === undefined ? '–' : `$${Math.round(value).toLocaleString('en-US')}`)
 export const specText = (camera: CameraSummary, id: string): string => camera.specs[id]?.text ?? '–'
+/** The year a camera was announced. */
+export const year = (camera: CameraSummary): string => String(camera.specs.announced?.value ?? camera.specs.announced?.text ?? '').slice(0, 4)
+/** Newest first, as the app's grid shows them. */
+export const NEWEST = [...RUN.cameras].sort((first, second) => String(second.specs.announced?.value ?? '').localeCompare(String(first.specs.announced?.value ?? '')) || first.rank - second.rank)
 export const sensorFormat = (camera: CameraSummary): string => String((camera.specs.sensor?.value as { format?: string } | undefined)?.format ?? '')
 
 /** One row of filters per category, each a one-of-a-few choice. */

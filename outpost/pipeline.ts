@@ -10,7 +10,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync, readFileSync, existsSync, copyFileSync } from 'node:fs';
-import { candidate, dataUrl, MIN_PX } from './images.ts';
+import { candidate, dataUrl, thumbUrl, MIN_PX } from './images.ts';
 import { dirname, join } from 'node:path';
 import { gateway } from 'outpost-gateway';
 import { cameraKey, brandOf, displayName, BRANDS, flatSpecs, type Source } from './specs.ts';
@@ -767,7 +767,7 @@ export function catalog() {
 // The approved pictures: thumbnails for every camera, or one camera's full size.
 export function pictures(id?: string) {
   const out: Record<string, Record<string, string | null>> = {};
-  for (const r of all('SELECT * FROM pictures' + (id ? ' WHERE camera = ?' : ''), ...(id ? [id] : []))) (out[r.camera] ||= {})[r.side] = dataUrl(id ? r.file : r.thumb);
+  for (const r of all('SELECT * FROM pictures' + (id ? ' WHERE camera = ?' : ''), ...(id ? [id] : []))) (out[r.camera] ||= {})[r.side] = id ? dataUrl(r.file) : thumbUrl(r.thumb);
   return out;
 }
 export const reviewState = () => ({

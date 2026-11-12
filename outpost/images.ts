@@ -150,4 +150,12 @@ export function candidate(urls: string | string[], dir: string, stem: string, wh
     rmSync(tmp, { force: true });
   }
 }
+// Every camera's thumbnail at once, for the grid: as small WebP (made once beside the PNG), since all the PNGs
+// together are too large for one answer.
+export function thumbUrl(file: string) {
+  if (!existsSync(file)) return null;
+  const small = file.replace(/\.png$/, '.webp');
+  if (!existsSync(small)) run('ffmpeg', ['-v', 'error', '-y', '-i', file, '-c:v', 'libwebp', '-quality', '78', small]);
+  return existsSync(small) ? `data:image/webp;base64,${readFileSync(small).toString('base64')}` : dataUrl(file);
+}
 export const dataUrl = (file: string) => (existsSync(file) ? `data:image/png;base64,${readFileSync(file).toString('base64')}` : null);

@@ -1,5 +1,6 @@
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle, Leaderboard, type LeaderboardColumn, Tabs, TabsContent, TabsList, TabsTrigger, TradeoffChart } from '@kevinschaich/components'
-import { BENCH, CAMERAS, type CameraSummary, FILTERS, TABS, picture, price, specText } from '@site/data'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Empty, EmptyDescription, EmptyHeader, EmptyTitle, Leaderboard, type LeaderboardColumn, Tabs, TabsContent, TabsList, TabsTrigger } from '@kevinschaich/components'
+import { BENCH, CAMERAS, type CameraSummary, FILTERS, NEWEST, TABS, picture, price, specText, year } from '@site/data'
+import { LevelChart } from '@site/pages/level-chart'
 import { Method } from '@site/pages/method'
 import { useEffect, useState } from 'react'
 
@@ -26,6 +27,32 @@ const COLUMNS: LeaderboardColumn<CameraSummary>[] = [
     { key: 'burst', label: 'Burst', render: camera => specText(camera, 'burst') },
     { key: 'announced', label: 'Announced', render: camera => specText(camera, 'announced') },
 ]
+
+/** A camera as the app's grid shows it: its picture, name, brand, year and price, and its spec level as a bar. */
+function CameraCard({ camera }: { camera: CameraSummary }) {
+    return (
+        <a href={`${BENCH.path}${camera.slug}/`} className="group flex flex-col gap-3 rounded-lg bg-muted/40 p-3.5 transition-colors hover:bg-muted">
+            <span className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md">
+                {camera.image.front ? (
+                    <img src={picture(camera.image.front)} alt={camera.name} loading="lazy" className="size-full object-contain transition-transform group-hover:scale-[1.03]" />
+                ) : (
+                    <span className="text-xs text-muted-foreground">No image yet</span>
+                )}
+            </span>
+            <span className="flex flex-col gap-0.5">
+                <span className="font-semibold">{camera.name}</span>
+                <span className="text-sm text-muted-foreground">{[camera.brand, year(camera), camera.price !== null ? price(camera.price) : null].filter(Boolean).join(' · ')}</span>
+            </span>
+            <span className="flex items-center gap-2 text-xs text-muted-foreground">
+                Spec level
+                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+                    <span className="block h-full rounded-full bg-foreground" style={{ width: `${camera.level ?? 0}%` }} />
+                </span>
+                <b className="w-6 text-right text-sm text-foreground tabular-nums">{camera.level ?? '–'}</b>
+            </span>
+        </a>
+    )
+}
 
 /** The tab a path under BENCH.path names; the first tab is the bench's root. */
 export function tabFromPath(path: string): string | undefined {
@@ -58,6 +85,7 @@ function Filters({ chosen, choose }: { chosen: Record<string, string>; choose: (
 export function Overview({ initialTab }: { initialTab: string }) {
     const [tab, setTab] = useState(initialTab)
     const [chosen, setChosen] = useState<Record<string, string>>(Object.fromEntries(FILTERS.map(filter => [filter.id, 'all'])))
+    const newest = NEWEST.filter(camera => FILTERS.every(filter => filter.options.find(option => option.id === chosen[filter.id])!.matches(camera)))
     const shown = CAMERAS.filter(camera => FILTERS.every(filter => filter.options.find(option => option.id === chosen[filter.id])!.matches(camera)))
     const choose = (filter: string, option: string) => setChosen(previous => ({ ...previous, [filter]: option }))
     useEffect(() => {
@@ -90,25 +118,36 @@ export function Overview({ initialTab }: { initialTab: string }) {
                 ) : (
                     <>
                         <Filters chosen={chosen} choose={choose} />
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Newest cameras</CardTitle>
+                                <CardDescription>Every value read from the makers, retailers and reviews, and checked across independent sources. Open a camera for its sources.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                {newest.map(camera => (
+                                    <CameraCard key={camera.id} camera={camera} />
+                                ))}
+                            </CardContent>
+                        </Card>
+                        <h2 className="mt-4 font-heading text-xl font-semibold">Every camera</h2>
                         <Leaderboard rows={shown} rowKey={camera => camera.id} defaultSort="level" columns={COLUMNS} />
-                        <p className="text-sm text-muted-foreground">
-                            {CAMERAS.length} camera bodies, newest first on B&H. The spec level, out of 100, scores what a camera can do on fixed scales, whatever it costs. Pick a camera for every spec and who agrees on it.
-                        </p>
                     </>
                 )}
             </TabsContent>
-            <TabsContent value="value" className="flex flex-col gap-3">
+            <TabsContent value="spec-level" className="flex flex-col gap-3">
                 <Filters chosen={chosen} choose={choose} />
-                <TradeoffChart
-                    points={shown.filter(camera => camera.price && camera.level !== null).map(camera => ({ id: camera.slug, label: camera.name, x: camera.price!, y: 100 - camera.level! }))}
-                    xLabel="Price"
-                    yLabel="Spec level"
-                    xScale="log"
-                    formatX={value => price(value)}
-                    formatY={value => String(Math.round(100 - value))}
-                    onSelect={id => location.assign(`${BENCH.path}${id}/`)}
-                />
-                <p className="text-sm text-muted-foreground">Toward the bottom left is more camera for the money: a higher spec level at a lower price.</p>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Spec level</CardTitle>
+                        <CardDescription>
+                            Spec level scores video, resolution, burst, viewfinder, stabilization, card slots, build and battery, autofocus and screen on fixed scales, weighted by how much each
+                            matters (video most). Price is today's new price where known, else the launch MSRP.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <LevelChart cameras={shown} />
+                    </CardContent>
+                </Card>
             </TabsContent>
             <TabsContent value="method">
                 <Method />

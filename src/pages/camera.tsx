@@ -1,4 +1,5 @@
-import { Stat, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@kevinschaich/components'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Stat, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@kevinschaich/components'
+import { LevelChart } from '@site/pages/level-chart'
 import { BENCH, CAMERAS, type CameraDetail, type CameraSummary, type Evidence, type Fact, RUN, picture, price } from '@site/data'
 
 const NEED = RUN.need ?? 3
@@ -114,9 +115,10 @@ export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: 
                     {(['front', 'back'] as const)
                         .filter(side => camera.image[side])
                         .map(side => (
-                            <div key={side} className="flex aspect-[4/3] items-center justify-center rounded-lg bg-muted p-6">
+                            <figure key={side} className="relative flex aspect-[4/3] items-center justify-center rounded-xl bg-muted p-6">
                                 <img src={picture(camera.image[side])} alt={`${camera.name}, ${side}`} className="max-h-full max-w-full object-contain" />
-                            </div>
+                                <figcaption className="absolute bottom-2 left-3 text-xs text-muted-foreground capitalize">{side}</figcaption>
+                            </figure>
                         ))}
                 </div>
             )}
@@ -129,38 +131,47 @@ export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: 
                 <Stat boxed size="lg" label="Sensor" value={facts.mp?.text ?? '–'} sub={(facts.sensor?.text ?? '').split(' (')[0]} />
             </div>
 
-            {detail?.level?.reasons?.length ? (
-                <section className="flex flex-col gap-3">
-                    <h2 className="font-heading text-xl font-semibold">How the spec level adds up</h2>
-                    <div className="flex flex-col gap-2">
-                        {[...detail.level.reasons]
-                            .sort((first, second) => second.weight - first.weight)
-                            .map(reason => (
-                                <div key={reason.area} className="grid grid-cols-[9rem_1fr_3rem] items-center gap-3 text-sm">
-                                    <span className="text-muted-foreground">{reason.area}</span>
-                                    <div className="flex flex-col gap-1">
-                                        <div className="h-2 overflow-hidden rounded-full bg-muted">
-                                            <div className="h-full rounded-full bg-foreground" style={{ width: `${reason.score}%` }} />
-                                        </div>
-                                        <span className="text-xs text-muted-foreground">
-                                            {reason.why} · counts {reason.weight}%
-                                        </span>
-                                    </div>
-                                    <span className="text-right tabular-nums">{reason.points}</span>
-                                </div>
-                            ))}
-                    </div>
-                </section>
-            ) : null}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Spec level</CardTitle>
+                    <CardDescription>Where it sits among the others for its price, and what makes up its level.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-6">
+                    <LevelChart focus={camera.id} />
+                    {detail?.level?.reasons?.length ? (
+                        <Table>
+                            <TableBody>
+                                {[...detail.level.reasons]
+                                    .sort((first, second) => second.weight - first.weight)
+                                    .map(reason => (
+                                        <TableRow key={reason.area}>
+                                            <TableCell className="w-40 text-muted-foreground">{reason.area}</TableCell>
+                                            <TableCell>{reason.why}</TableCell>
+                                            <TableCell className="w-48">
+                                                <span className="block h-1.5 overflow-hidden rounded-full bg-border">
+                                                    <span className="block h-full rounded-full bg-foreground" style={{ width: `${reason.score}%` }} />
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="w-28 text-right tabular-nums text-muted-foreground">
+                                                {reason.points} of {reason.weight}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                            </TableBody>
+                        </Table>
+                    ) : null}
+                </CardContent>
+            </Card>
 
-            <section className="flex flex-col gap-3">
-                <div className="flex flex-col gap-1">
-                    <h2 className="font-heading text-xl font-semibold">Specifications</h2>
-                    <p className="text-sm text-muted-foreground">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Specifications</CardTitle>
+                    <CardDescription>
                         Each value shows its most reliable source and how many others agree: green when {NEED} or more independent sources agree, amber for two, grey for one, red when
                         sources disagree and no majority holds. Open a value for what each source says.
-                    </p>
-                </div>
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -183,14 +194,16 @@ export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: 
                         })}
                     </TableBody>
                 </Table>
-            </section>
+                </CardContent>
+            </Card>
 
             {detail?.sources?.length ? (
-                <section className="flex flex-col gap-3">
-                    <div className="flex flex-col gap-1">
-                        <h2 className="font-heading text-xl font-semibold">Sources</h2>
-                        <p className="text-sm text-muted-foreground">Every page read for this camera, and when it was scraped.</p>
-                    </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Sources</CardTitle>
+                        <CardDescription>Every page read for this camera, and when it was scraped.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
                     <Table>
                         <TableBody>
                             {detail.sources.map(source => (
@@ -206,7 +219,8 @@ export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: 
                             ))}
                         </TableBody>
                     </Table>
-                </section>
+                    </CardContent>
+                </Card>
             ) : null}
         </article>
     )
