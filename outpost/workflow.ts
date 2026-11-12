@@ -158,12 +158,12 @@ export async function cambench() {
         await context.log(`Pictures ${index + 1} of ${batches.length}`);
         commit = (await context.publish({ repo: REPOSITORY, files: batch, message: 'Update camera pictures' })).commit ?? commit;
       }
-      const results = await context.publish({
+      const published = await context.publish({
         repo: REPOSITORY,
         files: { ...file.cameraFiles, 'results/cambench.json': `${JSON.stringify(file.index, null, 2)}\n` },
         message: 'Update results',
       });
-      commit = results.commit ?? commit;
+      commit = published.commit ?? commit;
       return { commit, summary: commit ? `Published ${commit.slice(0, 7)}` : 'Nothing changed' };
     },
   });
