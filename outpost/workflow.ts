@@ -13,9 +13,12 @@
 // Each step is the pipeline's own (pipeline.ts keeps every task and its output in SQLite): a stopped run goes
 // on where it stopped, and only failed tasks are redone.
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { workflows } from 'outpost-workflows';
 import * as P from './pipeline.ts';
+import { NEED } from './consensus.ts';
 
 const REPOSITORY = 'darkgrade/cambench';
 // publish: only export and publish what is there now (no step runs, nothing is fetched).
@@ -43,10 +46,24 @@ export function results() {
       images[path] = file;
       image[side] = path.replace(/^public\//, '');
     }
+    // Each fact as the app shows it: its value, who agrees, and each source's evidence (the page's link, when it
+    // was scraped, and what it was read from): never a page's full text.
+    const evidence = (list: any[] = []) => list.map((e) => ({ source: e.source, owner: e.owner, url: e.url, at: e.at, label: e.label, raw: String(e.raw ?? ''), value: e.value ?? null }));
     const facts = Object.fromEntries(
       Object.entries(camera.facts as Record<string, any>)
         .filter(([key]) => !key.startsWith('image_'))
-        .map(([key, fact]) => [key, { value: fact.value ?? null, text: fact.text ?? null, status: fact.status, owners: fact.owners || [] }]),
+        .map(([key, fact]) => [
+          key,
+          {
+            value: fact.value ?? null,
+            text: fact.text ?? null,
+            status: fact.status,
+            owners: fact.owners || [],
+            evidence: evidence(fact.evidence),
+            conflicts: evidence(fact.conflicts),
+            ...(fact.items ? { items: fact.items.map((item: any) => ({ text: item.text, status: item.status, owners: item.owners || [] })) } : {}),
+          },
+        ]),
     );
     return {
       id: camera.id,
@@ -59,6 +76,8 @@ export function results() {
       level: camera.level,
       image,
       facts,
+      // Every page read for this camera: where, and when it was scraped (its text stays in Outpost).
+      sources: (camera.sources || []).map((source: any) => ({ source: source.source, title: source.title, url: source.url, scrapedAt: source.scrapedAt })),
     };
   });
   // The overview's index: what the list, filters and chart show for each camera; each camera's page reads its
@@ -69,6 +88,8 @@ export function results() {
     version: 1,
     date: new Date().toISOString(),
     run: run ? { id: run.id, createdAt: run.created_at } : null,
+    // Independent sources that make a value verified (green).
+    need: NEED,
     specs: P.specList(),
     sources: P.SOURCES.map((s) => ({ key: s.key, title: s.title, owner: s.owner, trusted: s.trusted })),
     method: {
@@ -93,7 +114,7 @@ export function results() {
   const cameraFiles = Object.fromEntries(
     rows.map((row) => [
       `results/cameras/${row.slug}.json`,
-      `${JSON.stringify({ ...row, facts: Object.fromEntries(Object.entries(row.facts).map(([key, fact]: [string, any]) => [key, { ...fact, sources: fact.owners.length, owners: fact.owners.slice(0, 12) }])) })}\n`,
+      `${JSON.stringify(row)}\n`,
     ]),
   );
   const file = { index, cameraFiles, cameras: rows };
@@ -101,8 +122,14 @@ export function results() {
 }
 
 // A picture as the site serves it: WebP, at most 1200 px wide, transparency kept.
-export const webp = (file: string) =>
-  execFileSync('ffmpeg', ['-v', 'error', '-i', file, '-vf', "scale='min(1200,iw)':-2", '-c:v', 'libwebp', '-quality', '82', '-f', 'webp', '-'], { maxBuffer: 1 << 28 }).toString('base64');
+// (Written to a file: WebP's header holds its size, which ffmpeg can only fill in on a seekable output.)
+export function webp(file: string): string {
+  const out = join(mkdtempSync(join(tmpdir(), 'cambench-')), 'picture.webp');
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', file, '-vf', "scale='min(1200,iw)':-2", '-c:v', 'libwebp', '-quality', '82', out]);
+  const data = readFileSync(out).toString('base64');
+  rmSync(dirname(out), { recursive: true, force: true });
+  return data;
+}
 
 export async function cambench() {
   const { task, serve, start } = await workflows('cambench');

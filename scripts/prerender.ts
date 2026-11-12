@@ -19,6 +19,7 @@ interface Route {
 const root = resolve(import.meta.dirname, '..')
 const server = (await import(join(root, '.server', 'server.js'))) as {
     render: (path: string) => string
+    pageData: (path: string) => unknown
     routes: () => Route[]
     BENCH: { path: string; origin: string }
 }
@@ -30,6 +31,9 @@ const FONTS = [
     { name: 'Public Sans', data: font(400), weight: 400 as const, style: 'normal' as const },
     { name: 'Public Sans', data: font(700), weight: 700 as const, style: 'normal' as const },
 ]
+
+// A page's own data for the browser (a camera's specs and evidence), as JSON it can read without a request.
+const embedded = (data: unknown): string => (data ? `<script id="camera-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>` : '')
 
 const escape = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
@@ -80,7 +84,7 @@ for (const route of server.routes()) {
     ].join('\n        ')
     const html = template
         .replace(/<title>[\s\S]*?<meta name="twitter:card"[^>]*>/, head)
-        .replace('<div id="root"></div>', `<div id="root">${server.render(`${server.BENCH.path}${route.path}`)}</div>`)
+        .replace('<div id="root"></div>', `<div id="root">${server.render(`${server.BENCH.path}${route.path}`)}</div>${embedded(server.pageData(`${server.BENCH.path}${route.path}`))}`)
     const file = join(output, route.path, 'index.html')
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, html)

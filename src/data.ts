@@ -59,14 +59,29 @@ export interface CameraSummary {
     specs: Record<string, { value: unknown; text: string | null }>
 }
 
+/** What one source said about a spec: where it was read, when, and the line it was read from. */
+export interface Evidence {
+    source: string
+    owner: string
+    url: string
+    at: string
+    label: string
+    raw: string
+    value: unknown
+}
+
 export interface Fact {
     value: unknown
     text: string | null
-    /** verified (independent sources agree), quote (a price, from listings), or how far from verified. */
+    /** verified (enough independent sources agree), quote (a price, from listings), or how far from verified. */
     status: string
+    /** Who states it, most reliable first; two sites of one company count once. */
     owners: string[]
-    /** How many independent owners state it. */
-    sources: number
+    evidence: Evidence[]
+    /** Sources that state something else. */
+    conflicts: Evidence[]
+    /** A list spec (ports, formats): each item with its own status. */
+    items?: { text: string; status: string; owners: string[] }[]
 }
 
 export interface CameraDetail {
@@ -78,10 +93,14 @@ export interface CameraDetail {
     level: Level
     image: { front?: string; back?: string }
     facts: Record<string, Fact>
+    /** Every page read for this camera (its text stays in Outpost). */
+    sources: { source: string; title: string; url: string; scrapedAt: string }[]
 }
 
 export interface Results {
     date?: string
+    /** Independent sources that make a value verified. */
+    need?: number
     specs: Spec[]
     sources: { key: string; title: string; owner: string; trusted: boolean }[]
     method: Record<string, string>
@@ -91,15 +110,19 @@ export interface Results {
 export const RUN = results as Results
 export const CAMERAS = [...RUN.cameras].sort((first, second) => (second.level ?? -1) - (first.level ?? -1))
 
-const details = import.meta.glob<CameraDetail>('../results/cameras/*.json', { eager: true, import: 'default' })
-export function cameraDetail(slug: string): CameraDetail | undefined {
-    return details[`../results/cameras/${slug}.json`]
+/**
+ * One camera's page data: the server render reads every camera's file (src/details.ts); a browser reads only
+ * its own page's, which the build embeds in that page (id "camera-data"), so no page carries every camera.
+ */
+export function embeddedDetail(): CameraDetail | undefined {
+    const element = typeof document === 'undefined' ? null : document.getElementById('camera-data')
+    return element?.textContent ? (JSON.parse(element.textContent) as CameraDetail) : undefined
 }
 
 export const picture = (path: string | undefined): string | undefined => (path ? `${BENCH.path}${path}` : undefined)
 export const price = (value: number | null | undefined): string => (value === null || value === undefined ? '–' : `$${Math.round(value).toLocaleString('en-US')}`)
 export const specText = (camera: CameraSummary, id: string): string => camera.specs[id]?.text ?? '–'
-const sensorFormat = (camera: CameraSummary): string => String((camera.specs.sensor?.value as { format?: string } | undefined)?.format ?? '')
+export const sensorFormat = (camera: CameraSummary): string => String((camera.specs.sensor?.value as { format?: string } | undefined)?.format ?? '')
 
 /** One row of filters per category, each a one-of-a-few choice. */
 export const FILTERS: { id: string; label: string; options: { id: string; label: string; matches: (camera: CameraSummary) => boolean }[] }[] = [

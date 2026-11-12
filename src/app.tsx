@@ -1,10 +1,10 @@
 import { Byline } from '@kevinschaich/components'
-import { BENCH, CAMERAS, TABS } from '@site/data'
+import { BENCH, CAMERAS, type CameraDetail, TABS, embeddedDetail } from '@site/data'
 import { CameraPage } from '@site/pages/camera'
 import { Overview, tabFromPath } from '@site/pages/overview'
 
 /** The page for a path under BENCH.path: an overview tab, or one camera's page. */
-export function App({ path }: { path: string }) {
+export function App({ path, detail }: { path: string; detail?: CameraDetail }) {
     const id = path.replace(BENCH.path, '').replace(/\/$/, '')
     const tab = tabFromPath(path)
     const camera = tab ? undefined : id ? CAMERAS.find(candidate => candidate.slug === id) : undefined
@@ -19,7 +19,7 @@ export function App({ path }: { path: string }) {
                 </div>
                 <Byline repo={BENCH.repository} />
             </header>
-            {camera ? <CameraPage camera={camera} /> : <Overview initialTab={tab ?? TABS[0].id} />}
+            {camera ? <CameraPage camera={camera} detail={detail ?? embeddedDetail()} /> : <Overview initialTab={tab ?? TABS[0].id} />}
         </div>
     )
 }
