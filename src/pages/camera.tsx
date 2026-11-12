@@ -6,24 +6,31 @@ const SOURCE_TITLES = Object.fromEntries(RUN.sources.map(source => [source.key, 
 const sourceTitle = (key: string): string => SOURCE_TITLES[key] ?? key.replace(/^(news|site):/, '')
 const day = (at: string | undefined): string => (at ? new Date(at).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '–')
 
-/** The dot beside a value: green when enough independent sources agree, amber for two, grey for one, red when sources disagree. */
-function Dot({ fact }: { fact: Fact }) {
-    const tone = fact.conflicts.length ? 'bg-red-500' : fact.owners.length >= NEED ? 'bg-green-500' : fact.owners.length === 2 ? 'bg-amber-500' : 'bg-muted-foreground'
-    const meaning = fact.conflicts.length ? 'sources disagree' : fact.owners.length >= NEED ? 'verified' : `${fact.owners.length} source${fact.owners.length === 1 ? '' : 's'}`
-    return <span className={`inline-block size-2 shrink-0 rounded-full ${tone}`} title={meaning} aria-label={meaning} />
+// A value's status, as consensus set it: verified when enough independent sources agree (a few disagreeing
+// doesn't change that), likely for two, one source, disputed when fewer agree and some disagree, or a dated
+// market price.
+const STATUS: Record<string, { meaning: string; dot: string }> = {
+    verified: { meaning: 'independent sources agree', dot: 'bg-green-500' },
+    quote: { meaning: 'a market price, dated, from these sellers', dot: 'bg-green-500' },
+    likely: { meaning: 'two sources agree', dot: 'bg-amber-500' },
+    single: { meaning: 'one source', dot: 'bg-muted-foreground' },
+    disputed: { meaning: 'sources disagree', dot: 'bg-red-500' },
 }
 
-/** Who states a value: its most reliable source, and how many others agree. */
-function Agreement({ fact }: { fact: Fact }) {
+/** Who states a value, as a pill: its most reliable source and how many others agree, the dot its status. */
+function SourcePill({ fact }: { fact: Fact }) {
     if (!fact.owners.length) return <span className="text-muted-foreground">–</span>
+    const status = STATUS[fact.status] ?? STATUS.single
     const others = fact.owners.length - 1
+    const tip = `${status.meaning}: ${fact.owners.join(', ')}${fact.conflicts.length ? ` · ${fact.conflicts.length} disagree` : ''}`
     return (
-        <span className="flex items-center justify-end gap-2 whitespace-nowrap" title={fact.owners.join(', ')}>
-            <Dot fact={fact} />
-            <span>
-                {fact.owners[0]}
-                {others > 0 && <span className="text-muted-foreground"> + {others} other{others === 1 ? '' : 's'}</span>}
-            </span>
+        <span
+            title={tip}
+            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border bg-muted/60 py-0.5 pr-2.5 pl-2 text-xs ${fact.status === 'disputed' ? 'border-red-500/45' : 'border-border'}`}
+        >
+            <i className={`size-[7px] shrink-0 rounded-full ${status.dot}`} aria-hidden />
+            <b className="font-medium">{fact.owners[0]}</b>
+            {others > 0 && <small className="text-[11px] text-muted-foreground">+{others}</small>}
         </span>
     )
 }
@@ -79,7 +86,7 @@ function SpecRow({ label, tip, fact }: { label: string; tip: string; fact: Fact 
                     value
                 )}
             </TableCell>
-            <TableCell className="w-1/4 text-right">{fact ? <Agreement fact={fact} /> : null}</TableCell>
+            <TableCell className="w-1/4 text-right">{fact ? <SourcePill fact={fact} /> : null}</TableCell>
         </TableRow>
     )
 }
@@ -150,8 +157,8 @@ export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: 
                 <div className="flex flex-col gap-1">
                     <h2 className="font-heading text-xl font-semibold">Specifications</h2>
                     <p className="text-sm text-muted-foreground">
-                        Each value shows its most reliable source and how many others agree: green for {NEED} or more independent sources, amber for two, grey for one, red where sources
-                        disagree. Open a value for what each source says.
+                        Each value shows its most reliable source and how many others agree: green when {NEED} or more independent sources agree, amber for two, grey for one, red when
+                        sources disagree and no majority holds. Open a value for what each source says.
                     </p>
                 </div>
                 <Table>
