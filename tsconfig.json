@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES2023",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
+        "jsx": "react-jsx",
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "types": ["node", "bun", "vite/client"],
+        "paths": {
+            "outpost-workflows": ["../outpost/workflows/index.ts"],
+            "@site/*": ["./src/*"],
+            "@results/*": ["./results/*"]
+        }
+    },
+    "include": ["src", "vite.config.ts"]
+}

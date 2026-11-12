@@ -1,0 +1,505 @@
+<!doctype html>
+<html class="op-kit">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --muted: var(--color-text-secondary, light-dark(#77736b, #8a8a8a));
+        --ink: var(--color-text-primary, light-dark(#1f1e1c, #f2f2f2));
+        --tint: var(--color-background-tertiary, light-dark(rgba(31, 30, 28, 0.04), rgba(255, 255, 255, 0.05)));
+        --line: var(--color-border-primary, light-dark(rgba(31, 30, 28, 0.12), rgba(255, 255, 255, 0.12)));
+        --ok: var(--color-text-success, light-dark(#2f7d4f, #5fbf86));
+        --warn: var(--color-text-warning, light-dark(#a1650b, #e0a54a));
+        --bad: var(--color-text-danger, light-dark(#b3372b, #e5776b));
+        --accent: var(--color-text-info, light-dark(#c8102e, #ff5a6e));
+      }
+      .tabs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+      .cam { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 14px; border-radius: var(--border-radius-lg, 12px); background: var(--tint); cursor: pointer; text-align: left; border: 0; color: inherit; font: inherit; transition: transform 0.15s ease; }
+      .cam:hover { transform: translateY(-2px); }
+      .cam .pic { aspect-ratio: 4 / 3; width: 100%; display: grid; background: transparent; place-items: center; border-radius: var(--border-radius-md, 8px); overflow: hidden; }
+      .cam .pic img { width: 100%; height: 100%; object-fit: contain; }
+      .cam .pic .none { color: var(--muted); font-size: 12px; }
+      .cam b { font-size: 15px; font-weight: 600; line-height: 1.3; }
+      .cam:focus-visible { outline: 2px solid var(--accent); }
+      .cam small, .sub { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+      .level { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+      .level .op-meter { flex: 1; height: 5px; }
+      .level b { color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; min-width: 22px; text-align: right; }
+      .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .hero figure { margin: 0; aspect-ratio: 4 / 3; border-radius: var(--border-radius-lg, 12px); background: var(--tint); display: grid; place-items: center; overflow: hidden; position: relative; }
+      .hero figure img { width: 100%; height: 100%; object-fit: contain; }
+      
+      .hero figcaption { position: absolute; left: 10px; bottom: 8px; font-size: 11px; color: var(--muted); }
+      /* A value's sources as Google's AI answers show them: the most reliable one's name, then +N more. */
+      .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 2px 9px 2px 7px; border-radius: 99px; white-space: nowrap; color: var(--ink); background: var(--tint); border: 1px solid var(--line); }
+      .badge i { width: 7px; height: 7px; border-radius: 99px; background: var(--muted); flex: none; }
+      .badge b { font-weight: 500; }
+      .badge small { color: var(--muted); font-size: 11px; }
+      .badge[data-s='verified'] i { background: var(--ok); }
+      .badge[data-s='likely'] i { background: var(--warn); }
+      .badge[data-s='disputed'] { border-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+      .badge[data-s='disputed'] i { background: var(--bad); }
+      .badge[data-s='quote'] i { background: var(--ok); }
+      .specs td { vertical-align: top; }
+      .specs td:first-child { width: 34%; color: var(--muted); }
+      .specs tr.open td { background: var(--tint); }
+      .specs tr.row { cursor: pointer; }
+      .items { display: flex; flex-direction: column; gap: 2px; }
+      .items span { white-space: nowrap; }
+      .items span[data-s='single'] { color: var(--muted); }
+      .ev { display: grid; gap: 8px; font-size: 12px; }
+      .ev div { display: grid; gap: 2px; }
+      .ev code { white-space: pre-wrap; font-size: 11px; color: var(--muted); }
+      .ev .x { color: var(--bad); }
+      .groupname { font-weight: 600; padding-top: 14px !important; }
+      .chart { position: relative; }
+      .chart svg { width: 100%; height: auto; display: block; touch-action: none; }
+      .chart .tools { position: absolute; right: 10px; bottom: 44px; display: grid; gap: 6px; }
+      .chart .tools button { width: 30px; height: 30px; padding: 0; border-radius: 99px; }
+      .tip { opacity: 0; visibility: hidden; transition: opacity 0.14s ease, visibility 0s linear 0.14s; }
+      .tip.on { opacity: 1; visibility: visible; transition: opacity 0.14s ease; }
+      .tip { position: absolute; pointer-events: none; display: flex; gap: 10px; align-items: center; padding: 10px 14px 10px 12px; border-left: 3px solid var(--accent); background: var(--color-background-primary, light-dark(#fff, #1e1e1e)); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18); border-radius: 4px; min-width: 200px; }
+      .tip img { width: 64px; height: 48px; object-fit: contain; }
+      .tip b { display: block; font-size: 14px; }
+      .tip { align-items: flex-start; max-width: 340px; }
+      .tip .lv { font-size: 12px; margin-top: 4px; }
+      .tip ul { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; display: grid; gap: 2px; }
+      .tip li::before { content: '+ '; color: var(--ok, #3a3); font-weight: 600; }
+      .tip li.minus::before { content: '− '; color: var(--bad, #c33); }
+      .why { width: 100%; border-collapse: collapse; font-size: 13px; }
+      .why td { padding: 6px 8px; border-top: 1px solid var(--line); vertical-align: middle; }
+      .why td.bar { width: 30%; }
+      .why .op-meter { height: 5px; }
+      .why .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .legend { display: flex; justify-content: center; gap: 22px; font-size: 13px; color: var(--muted); padding-top: 6px; }
+      .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 99px; margin-right: 6px; vertical-align: -1px; }
+      .bars { display: grid; gap: 14px; }
+      .bar { display: grid; gap: 5px; }
+      .bar .top { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+      .bar .top span { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+      .bar .op-meter { height: 6px; }
+      .bar.nested { margin-left: 18px; }
+      .bar.nested .op-meter { height: 4px; }
+      .doing { font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+      .steps td { vertical-align: top; }
+      .steps .op-meter { width: 110px; display: inline-block; vertical-align: middle; margin-right: 8px; height: 5px; }
+      .steps small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; overflow-wrap: anywhere; }
+      .steps small.bad { color: var(--bad); }
+      .cov td, .cov th { text-align: center; font-size: 12px; }
+      .cov td:first-child, .cov th:first-child { text-align: left; white-space: nowrap; }
+      .dot { display: inline-block; width: 9px; height: 9px; border-radius: 99px; background: var(--line); }
+      .dot[data-s='saved'] { background: var(--ok); }
+      .dot[data-s='missing'] { background: transparent; box-shadow: inset 0 0 0 1.5px var(--line); }
+      .dot[data-s='failed'] { background: var(--bad); }
+      .cmp td { vertical-align: top; font-variant-numeric: tabular-nums; }
+      /* The better figure: its whole cell tinted a light green, in either mode. */
+      .cmp td.best { background: color-mix(in srgb, var(--ok) 14%, transparent); }
+      .cmp th { text-align: left; }
+      .pick { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+      .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 700px) { .hero, .two { grid-template-columns: 1fr; } }
+      .skel { display: grid; gap: 10px; padding: 4px 0; }
+      th.sortable { cursor: pointer; user-select: none; }
+      /* A table wider than its card scrolls sideways inside it; its first column stays in view. */
+      .wide { overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+      .wide > table { min-width: 100%; }
+      .wide > table.cov { width: max-content; }
+      /* Compare: one fixed column per camera (at most 320px, at least 220px) whose values wrap, as a camera's page does. */
+      .wide > table.cmp { table-layout: fixed; min-width: 0; width: clamp(calc(170px + var(--cams, 2) * 220px), 100%, calc(170px + var(--cams, 2) * 320px)); }
+      .cmp col.label { width: 170px; }
+      .cmp col.cam { width: auto; max-width: 320px; }
+      .cmp td, .cmp th { overflow-wrap: anywhere; white-space: normal; }
+      /* A list's entries one per line (the text joins them with line breaks). */
+      .cmp td, .specs td { white-space: pre-line; }
+      .cmp td .badge { margin-top: 4px; }
+      .wide > table.cov td:first-child, .wide > table.cov th:first-child, .wide > table.cmp td:first-child, .wide > table.cmp th:first-child { position: sticky; left: 0; z-index: 1; background: var(--op-card); }
+      .cov td, .cov th { white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="op-page">
+      <div class="op-header"><div><h1>Cambench</h1><p class="op-note">Reading…</p></div></div>
+      <section class="op-card"><div class="op-body skel"><div class="op-skeleton" style="width: 40%"></div><div class="op-skeleton" style="width: 85%"></div><div class="op-skeleton" style="width: 65%"></div></div></section>
+    </div>
+    <div id="runs" class="op-page" hidden style="padding-top: 0"><outpost-workflow-graph workflow="cambench"></outpost-workflow-graph></div>
+    <script type="module">
+      import { App } from 'https://cdn.jsdelivr.net/npm/@modelcontextprotocol/ext-apps@2.0.3/dist/src/app-with-deps.js';
+      const app = new App({ name: 'Cambench', version: '0.1.0' });
+      const root = document.getElementById('root');
+      const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+      const money = (n) => (n == null ? '—' : `$${Math.round(n).toLocaleString('en-US')}`);
+      const pct = (x) => `${Math.round(Math.max(0, Math.min(1, x || 0)) * 100)}%`;
+      const when = (t) => (t ? new Date(t).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : '');
+      const LABEL = { verified: (n) => `✓ ${n} sources`, likely: () => '2 sources', single: () => '1 source', disputed: () => 'Disputed', quote: (n) => `${n} seller${n === 1 ? '' : 's'}` };
+      let V = null, err = '', tab = 'cameras', camId = null, open = new Set(), cmp = [], diffOnly = false, sort = { k: 'announced', dir: -1 }, timer = null, Z = null, hover = null, lastCard = '';
+
+      // ---- Updating in place, so polling never re-animates what is already there.
+      function morph(el, html) { const n = document.createElement(el.tagName); n.innerHTML = html; patch(el, n); }
+      function patch(a, b) {
+        const ac = [...a.childNodes], bc = [...b.childNodes];
+        for (let i = 0; i < bc.length; i++) {
+          const x = ac[i], y = bc[i];
+          if (!x) a.appendChild(y);
+          else if (x.nodeType !== y.nodeType || x.nodeName !== y.nodeName) a.replaceChild(y, x);
+          else if (x.nodeType === 3) { if (x.data !== y.data) x.data = y.data; }
+          else if (x.nodeType === 1) {
+            for (const at of [...x.attributes]) if (!y.hasAttribute(at.name)) x.removeAttribute(at.name);
+            for (const at of [...y.attributes]) if (x.getAttribute(at.name) !== at.value) x.setAttribute(at.name, at.value);
+            if (x.tagName === 'INPUT' || x.tagName === 'TEXTAREA') { if (document.activeElement !== x && x.value !== (y.value ?? '')) x.value = y.value ?? ''; }
+            else patch(x, y);
+          }
+        }
+        for (let i = ac.length - 1; i >= bc.length; i--) a.removeChild(ac[i]);
+      }
+      async function call(name, args = {}) {
+        const r = await app.callServerTool({ name, arguments: args });
+        if (r.isError) throw new Error(r.content?.[0]?.text || `${name} failed`);
+        return r.structuredContent;
+      }
+      let picsAt = '';
+      async function load(name = 'cambench', args = {}) {
+        try { V = await call(name, args); err = ''; } catch (e) { err = e.message; }
+        const mark = `${V?.review?.approved}`;
+        if (mark !== picsAt) { picsAt = mark; loadPics(); }
+        draw();
+        schedule();
+      }
+      function schedule() {
+        clearTimeout(timer);
+        if (V?.busy || V?.progress?.run?.state === 'running' || V?.review?.waiting || V?.review?.run) timer = setTimeout(() => load('progress'), 2500);
+        reviewTick();
+        if (V?.reading > 0 && !readers.size) readTick();
+      }
+      // Pages not yet read get reader agents, eight at once, each with one page; followed here until none is left.
+      const READERS = 8, readers = new Map(); // run -> page
+      let reading = false, readLeft = null;
+      async function readTick() {
+        if (reading) return;
+        reading = true;
+        try {
+          for (const [run] of [...readers]) {
+            try { const st = await call('outpost/agent_status', { run }); if (st.status === 'done') readers.delete(run); } catch { readers.delete(run); }
+          }
+          const plan = await call('reading_plan', { busy: [...readers.values()], limit: READERS });
+          readLeft = plan.left;
+          for (const n of plan.next) {
+            if (readers.size >= READERS) break;
+            const { run } = await call('outpost/start_agent', { prompt: n.prompt, title: n.title, tools: 'app', model: 'sonnet', effort: 'low' });
+            readers.set(run, n.page);
+          }
+          if (!readers.size && !plan.left && readLeft !== null) { readLeft = 0; load('reprocess'); }
+        } catch (e) { err = `Reading: ${e.message}`; }
+        finally { reading = false; }
+        if (readers.size) setTimeout(readTick, 4000);
+        draw();
+      }
+      // Pictures waiting for review get an agent that looks at each one; one at a time, followed here.
+      let reviewing = false, review = null, approvedSeen = -1;
+      async function reviewTick() {
+        const r = V?.review;
+        if (!r || reviewing) return;
+        reviewing = true;
+        try {
+          if (r.run) {
+            try {
+              review = await call('outpost/agent_status', { run: r.run });
+              if (review.status === 'done') V.review = await call('save_review_run', { run: null });
+            } catch { V.review = await call('save_review_run', { run: null }); }
+          } else if (r.waiting > 0) {
+            const a = await call('review_prompt');
+            const { run } = await call('outpost/start_agent', a);
+            V.review = await call('save_review_run', { run });
+          }
+        } catch (e) { err = `Could not start the picture review: ${e.message}`; }
+        finally { reviewing = false; }
+        if (V?.review && V.review.approved !== approvedSeen) { approvedSeen = V.review.approved; loadPics(); }
+        draw();
+      }
+
+      // ---- Values.
+      const F = (c, k) => c.facts[k];
+      const T = (c, k) => F(c, k)?.text ?? '—';
+      const year = (c) => (F(c, 'announced')?.value || '').slice(0, 4);
+      const price = (c) => F(c, 'price_new')?.value ?? F(c, 'msrp')?.value ?? c.info?.price ?? null;
+      let PICS = {}, BIG = {};
+      const img = (c, side = 'front') => (camId === c.id && BIG[c.id]?.[side]) || PICS[c.id]?.[side] || null;
+      async function loadPics() { try { PICS = (await call('pictures')) || {}; draw(); } catch {} }
+      // Most reliable first: the maker, B&H, then the independent spec sheets.
+      const RANK = ['Canon', 'Nikon', 'Sony', 'Panasonic', 'Leica', 'Sigma', 'Fujifilm', 'Hasselblad', 'OM System', 'Pentax', 'B&H', 'DPReview', 'Adorama', 'Wex', 'Crutchfield', 'Wikipedia', 'MPB', 'eBay'];
+      const ranked = (owners) => [...owners].sort((a, b) => (RANK.indexOf(a) + 1 || 99) - (RANK.indexOf(b) + 1 || 99));
+      const STATE = { verified: 'independent sources agree', likely: '2 sources agree', single: 'one source', disputed: 'sources disagree', quote: 'a market price, dated, from these sellers' };
+      const badge = (f) => {
+        if (!f) return '';
+        const o = ranked(f.owners || []);
+        if (!o.length) return '';
+        const tip = `${STATE[f.status]}: ${o.join(', ')}${f.conflicts ? ` · ${f.conflicts} disagree` : ''}`;
+        return `<span class="badge" data-s="${f.status}" title="${esc(tip)}"><i></i><b>${esc(o[0])}</b>${o.length > 1 ? `<small>+${o.length - 1}</small>` : ''}</span>`;
+      };
+      const levelBar = (c) => (c.level?.level == null ? '<div class="level">Spec level unknown</div>' : `<div class="level"><span>Spec level</span><div class="op-meter"><span style="width:${c.level.level}%"></span></div><b>${c.level.level}</b></div>`);
+      const verifiedShare = () => {
+        let v = 0, n = 0;
+        for (const c of V.cameras) for (const f of Object.values(c.facts)) { n++; if (f.status === 'verified') v++; }
+        return n ? Math.round((v / n) * 100) : 0;
+      };
+
+      // ---- Pages.
+      function header() {
+        const n = V?.cameras?.length || 0;
+        const note = `${n ? `${n} cameras · ${verifiedShare()}% of values verified by ${V.need}+ independent sources` : 'No cameras yet: run a fetch from the Data tab.'}${V?.version ? ` · v${V.version}` : ''}`;
+        const t = (k, l) => `<button aria-pressed="${tab === k && !camId}" data-tab="${k}">${l}</button>`;
+        return `<div class="op-header"><div><h1>Cambench</h1><p class="op-note">${esc(note)}</p></div><div class="op-switch tabs">${t('cameras', 'Cameras')}${t('compare', `Compare${cmp.length ? ` (${cmp.length})` : ''}`)}${t('chart', 'Spec level')}${t('data', 'Data')}${t('runs', 'Runs')}</div></div>`;
+      }
+      function cameraGrid() {
+        if (!V.cameras.length) return `<section class="op-card"><div class="op-body"><div class="op-empty">No cameras yet. Open Data and choose Fetch from start: it finds the newest camera bodies on B&H and reads every source for each.</div></div></section>`;
+        const cols = [
+          ['name', 'Camera', (c) => c.name], ['announced', 'Released', (c) => F(c, 'announced')?.value || ''], ['msrp', 'MSRP', (c) => F(c, 'msrp')?.value ?? -1], ['price_new', 'New', (c) => F(c, 'price_new')?.value ?? -1],
+          ['price_used', 'Used', (c) => F(c, 'price_used')?.value ?? -1], ['mp', 'MP', (c) => F(c, 'mp')?.value ?? -1], ['mount', 'Mount', (c) => T(c, 'mount')], ['video_max', 'Max video', (c) => F(c, 'video_max')?.value?.w ?? -1], ['level', 'Level', (c) => c.level?.level ?? -1],
+        ];
+        const col = cols.find((x) => x[0] === sort.k) || cols[1];
+        const rows = [...V.cameras].sort((a, b) => { const x = col[2](a), y = col[2](b); return (x > y ? 1 : x < y ? -1 : 0) * sort.dir; });
+        const cell = (c, k) => {
+          if (k === 'name') return `<b>${esc(c.name)}</b>`;
+          if (k === 'level') return c.level?.level ?? '—';
+          if (['msrp', 'price_new', 'price_used'].includes(k)) return `${money(F(c, k)?.value)}`;
+          return esc(T(c, k));
+        };
+        return `<section class="op-card"><header><h2>Newest Cameras</h2><p>Every value read from saved pages and checked across independent sources. Open a camera for its sources.</p></header>
+          <div class="op-body"><div class="grid">${rows.map((c) => `<div class="cam" role="button" tabindex="0" data-cam="${esc(c.id)}"><div class="pic">${img(c) ? `<img src="${esc(img(c))}" alt="" loading="lazy" referrerpolicy="no-referrer">` : '<span class="none">No image yet</span>'}</div><b>${esc(c.name)}</b><small>${esc(c.brand)} · ${year(c) || '—'} · ${money(price(c))}</small>${levelBar(c)}</div>`).join('')}</div></div></section>
+          <section class="op-card"><header><h2>At a Glance</h2><p>Sort by any column.</p></header>
+          <div class="wide"><table class="op-table"><thead><tr>${cols.map(([k, l]) => `<th class="sortable${['msrp', 'price_new', 'price_used', 'mp', 'level'].includes(k) ? ' num' : ''}" data-sort="${k}">${l}${sort.k === k ? (sort.dir > 0 ? ' ↑' : ' ↓') : ''}</th>`).join('')}<th></th></tr></thead>
+          <tbody>${rows.map((c) => `<tr>${cols.map(([k]) => `<td class="${['msrp', 'price_new', 'price_used', 'mp', 'level'].includes(k) ? 'num' : ''}" data-cam="${esc(c.id)}" style="cursor:pointer">${cell(c, k)}</td>`).join('')}<td><button class="ghost" data-cmp="${esc(c.id)}">${cmp.includes(c.id) ? 'Comparing' : 'Compare'}</button></td></tr>`).join('')}</tbody></table></div></section>`;
+      }
+      function specRows(c, full) {
+        const groups = [...new Set(V.specs.map((s) => s.group))];
+        return groups.map((g) => {
+          const ss = V.specs.filter((s) => s.group === g && !s.id.startsWith('image_'));
+          if (!ss.length) return '';
+          return `<tr><td class="groupname" colspan="3">${esc(g)}</td></tr>` + ss.map((s) => {
+            const f = F(c, s.id), isOpen = open.has(s.id);
+            // Nothing read: say whether the sources had nothing to say, which is not the same as a miss.
+            const none = s.id === 'price_used' && c.sources.some((x) => x.source === 'ebay' || x.source === 'mpb') ? 'No used listings of this exact model yet (eBay, MPB)' : `Not listed by any of its ${c.sources.filter((x) => !['press', 'news', 'ebay', 'mpb'].includes(x.source)).length} spec sheets`;
+            const val = !f ? `<span class="op-muted">${none}</span>` : f.items?.length ? `<div class="items">${f.items.map((i) => `<span data-s="${i.status}" title="${esc(i.owners.join(', '))}">${esc(i.text)} <small class="sub">${i.owners.length}</small></span>`).join('')}</div>` : esc(f.text);
+            const ev = isOpen && full?.facts?.[s.id] ? evidence(full.facts[s.id]) : '';
+            return `<tr class="row${isOpen ? ' open' : ''}" data-spec="${s.id}" title="${esc(s.tip)}"><td>${esc(s.label)}</td><td>${val}</td><td class="num">${badge(f)}</td></tr>${ev ? `<tr class="open"><td></td><td colspan="2">${ev}</td></tr>` : ''}`;
+          }).join('');
+        }).join('');
+      }
+      function evidence(f) {
+        const one = (e, x) => `<div><span>${x ? '<span class="x">Disagrees:</span> ' : ''}<b>${esc(srcTitle(e.source))}</b> · ${esc(e.label)} · <a href="${esc(e.url)}" target="_blank" rel="noopener">page</a> · scraped ${esc(when(e.at))}</span><code>${esc(e.raw)}</code></div>`;
+        return `<div class="ev">${(f.evidence || []).map((e) => one(e, false)).join('')}${(f.conflicts || []).map((e) => one(e, true)).join('')}</div>`;
+      }
+      const srcTitle = (k) => V.sources.find((s) => s.key === k)?.title || k.replace(/^news:/, '');
+      let full = null;
+      function cameraPage() {
+        const c = V.cameras.find((x) => x.id === camId);
+        if (!c) return `<section class="op-card"><div class="op-body"><div class="op-empty">That camera is not in the atlas. <button class="ghost" data-back>Back to cameras</button></div></div></section>`;
+        const fig = (side, label) => `<figure>${img(c, side) ? `<img src="${esc(img(c, side))}" alt="${esc(c.name)} ${side}" referrerpolicy="no-referrer">` : `<span class="op-muted">No ${side} image yet</span>`}<figcaption>${label}</figcaption></figure>`;
+        return `<div class="actions"><button class="ghost" data-back>← All cameras</button><button class="ghost" data-cmp="${esc(c.id)}">${cmp.includes(c.id) ? 'In comparison' : 'Add to comparison'}</button></div>
+          <section class="op-card"><div class="op-body" style="display:grid;gap:14px">
+            <div><h2 style="margin:0">${esc(c.name)}</h2><p class="sub" style="margin:4px 0 0">${esc(c.brand)} · ${esc(T(c, 'type'))} · ${esc(T(c, 'mount'))} · released ${esc(T(c, 'announced'))}</p></div>
+            <div class="hero">${fig('front', 'Front')}${fig('back', 'Back')}</div>
+            <div class="op-grid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">
+              ${[['Spec level', c.level?.level ?? '—'], ['MSRP', money(F(c, 'msrp')?.value)], ['New', money(F(c, 'price_new')?.value)], ['Used', money(F(c, 'price_used')?.value)], ['Sensor', `${T(c, 'mp')}`]].map(([k, v]) => `<div><div class="sub">${k}</div><div class="op-stat" style="font-size:22px">${esc(v)}</div></div>`).join('')}
+            </div></div></section>
+          <section class="op-card"><header><h2>Spec Level</h2><p>Where it sits among the others for its price. ${esc(levelNote())}</p></header><div class="op-body">${chart(c.id)}${levelTable(c.level)}</div></section>
+          <section class="op-card"><header><h2>Specifications</h2><p>Each value shows its most reliable source and how many others agree; the dot is green for ${V.need} or more, amber for 2, grey for 1, red where sources disagree. Click a row for each source's words, the page and when it was scraped.</p></header>
+            <div class="wide"><table class="op-table specs"><tbody>${specRows(c, full?.id === c.id ? full : null)}</tbody></table></div></section>
+          <section class="op-card"><header><h2>Sources</h2><p>Every page read for this camera, saved in full as Markdown.</p></header><div class="wide"><table class="op-table"><tbody>${c.sources.map((s) => `<tr><td>${esc(s.title)}</td><td><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a></td><td class="num sub">${esc(when(s.scrapedAt))}</td></tr>`).join('') || '<tr><td class="op-muted">No pages saved.</td></tr>'}</tbody></table></div></section>`;
+      }
+      const levelNote = () => 'Spec level scores video, resolution, burst, viewfinder, stabilization, card slots, build and battery, autofocus, screen, shutter and ISO, and connectivity on fixed scales, weighted by how much each matters (video most). A camera with no viewfinder scores nothing for it.';
+      // What lifts a camera's level and what holds it back.
+      const reasonList = (l) => (!l || (!l.strengths?.length && !l.weaknesses?.length) ? '' : `<ul>${(l.strengths || []).map((x) => `<li>${esc(x)}</li>`).join('')}${(l.weaknesses || []).map((x) => `<li class="minus">${esc(x)}</li>`).join('')}</ul>`);
+      const levelTable = (l) => (!l?.reasons?.length ? '' : `<table class="why"><tbody>${[...l.reasons].sort((a, b) => b.weight - a.weight).map((r) => `<tr><td>${esc(r.area)}</td><td>${esc(r.why)}</td><td class="bar"><div class="op-meter"><span style="width:${r.score}%"></span></div></td><td class="num">${r.points} of ${r.weight}</td></tr>`).join('')}${(l.missing || []).map((m) => `<tr><td>${esc(m)}</td><td class="op-muted" colspan="3">Not known: left out, the rest reweighted</td></tr>`).join('')}</tbody></table>`);
+      function compare() {
+        const cs = cmp.map((id) => V.cameras.find((c) => c.id === id)).filter(Boolean);
+        const opts = V.cameras.filter((c) => !cmp.includes(c.id)).map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+        const picker = `<div class="pick">${cs.map((c) => `<button class="ghost" data-cmp="${esc(c.id)}">${esc(c.name)} ✕</button>`).join('')}${cs.length < 4 ? `<select data-add><option value="">Add a camera…</option>${opts}</select>` : ''}<label class="sub"><input type="checkbox" data-diff ${diffOnly ? 'checked' : ''}> Only differences</label></div>`;
+        if (cs.length < 2) return `<section class="op-card"><header><h2>Compare Cameras</h2><p>Pick two to four cameras to see them side by side.</p></header><div class="op-body">${picker}</div></section>`;
+        const best = (s, c) => {
+          const scores = cs.map((x) => (x.facts[s.id] && SCORED.has(s.id) ? scoreOf(s.id, x.facts[s.id]) : null));
+          const v = scores[cs.indexOf(c)], top = Math.max(...scores.filter((x) => x != null));
+          return v != null && scores.filter((x) => x != null).length > 1 && v === top && scores.some((x) => x != null && x < top);
+        };
+        const rows = V.specs.filter((s) => !s.id.startsWith('image_')).map((s) => {
+          const texts = cs.map((c) => c.facts[s.id]?.text ?? '—');
+          if (diffOnly && new Set(texts).size === 1) return '';
+          return `<tr><td class="sub">${esc(s.label)}</td>${cs.map((c, i) => `<td class="${best(s, c) ? 'best' : ''}">${esc(texts[i])}</td>`).join('')}</tr>`;
+        }).join('');
+        return `<section class="op-card"><header><h2>Compare Cameras</h2><p>Better figures are green, where higher is better.</p></header><div class="op-body">${picker}</div>
+          <div class="wide"><table class="op-table cmp" style="--cams:${cs.length}"><colgroup><col class="label">${cs.map(() => '<col class="cam">').join('')}</colgroup><thead><tr><th></th>${cs.map((c) => `<th><div class="pic" style="height:80px;display:grid;place-items:center">${img(c) ? `<img src="${esc(img(c))}" style="max-height:80px;max-width:120px;object-fit:contain" referrerpolicy="no-referrer">` : ''}</div><a href="#" data-cam="${esc(c.id)}">${esc(c.name)}</a><div class="sub">${money(price(c))} · level ${c.level?.level ?? '—'}</div></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div></section>`;
+      }
+      const SCORED = new Set(['mp', 'af_points', 'burst', 'iso_max', 'iso_ext', 'evf_dots', 'screen_dots', 'battery_life', 'shutter_elec', 'shutter_mech', 'video_bits', 'raw_bits', 'evf_mag', 'screen_size']);
+      const scoreOf = (k, f) => (k.startsWith('shutter') ? 1 / f.value : typeof f.value === 'number' ? f.value : null);
+
+      // ---- The spec level chart: price across, level up, the camera in focus in the accent colour.
+      function chart(focus) {
+        const pts = V.cameras.map((c) => ({ c, x: price(c), y: c.level?.level })).filter((p) => p.x != null && p.y != null);
+        if (pts.length < 2) return `<div class="op-empty">The chart needs a price and a spec level for at least two cameras.</div>`;
+        const W = 760, H = 420, L = 40, R = 20, TP = 16, B = 46;
+        const xs = pts.map((p) => p.x), lo = Math.min(...xs), hi = Math.max(...xs), pad = (hi - lo) * 0.08 || 200;
+        const full = { x0: Math.max(0, lo - pad), x1: hi + pad, y0: 0, y1: 100 };
+        const z = Z && Z.focus === focus ? Z : (Z = { focus, ...full });
+        const sx = (x) => L + ((x - z.x0) / (z.x1 - z.x0)) * (W - L - R), sy = (y) => TP + (1 - (y - z.y0) / (z.y1 - z.y0)) * (H - TP - B);
+        const step = nice((z.x1 - z.x0) / 5), ticks = [];
+        for (let t = Math.ceil(z.x0 / step) * step; t <= z.x1; t += step) ticks.push(t);
+        const grid = [...ticks.map((t) => `<line x1="${sx(t)}" x2="${sx(t)}" y1="${TP}" y2="${H - B}" stroke="var(--line)"/><text x="${sx(t)}" y="${H - B + 22}" text-anchor="middle" font-size="13" fill="var(--muted)">${money(t)}</text>`),
+          ...[0, 20, 40, 60, 80, 100].filter((y) => y >= z.y0 && y <= z.y1).map((y) => `<line x1="${L}" x2="${W - R}" y1="${sy(y)}" y2="${sy(y)}" stroke="var(--line)"/><text x="${L - 8}" y="${sy(y) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${y}</text>`)].join('');
+        const dots = pts.filter((p) => p.x >= z.x0 && p.x <= z.x1 && p.y >= z.y0 && p.y <= z.y1).sort((a) => (a.c.id === focus ? 1 : -1)).map((p) => {
+          const on = p.c.id === focus || p.c.id === hover;
+          return `<circle data-pt="${esc(p.c.id)}" cx="${sx(p.x)}" cy="${sy(p.y)}" r="${p.c.id === focus ? 11 : 8}" fill="${p.c.id === focus ? 'var(--accent)' : 'var(--muted)'}" fill-opacity="${p.c.id === focus ? 1 : on ? 0.7 : 0.35}" style="cursor:pointer"/>`;
+        }).join('');
+        // Only while a dot is hovered (a camera's own page has its reasons in the table below), beside the dot on
+        // the side with more room and growing away from it, so it never sits under the cursor or over its dot.
+        const tipC = hover && V.cameras.find((c) => c.id === hover);
+        const tp = tipC && pts.find((p) => p.c.id === tipC.id);
+        const at = tp && { x: (sx(tp.x) / W) * 100, y: (sy(tp.y) / H) * 100 };
+        const place = at ? `${at.x < 55 ? `left:calc(${at.x}% + 18px)` : `right:calc(${100 - at.x}% + 18px)`};${at.y < 50 ? `top:max(0px, calc(${at.y}% - 24px))` : `bottom:max(0px, calc(${100 - at.y}% - 24px))`}` : '';
+        const card = tp ? `<div class="tip on" style="${place}">${img(tipC) ? `<img src="${esc(img(tipC))}" referrerpolicy="no-referrer">` : ''}<div><b>${esc(tipC.name.replace(tipC.brand + ' ', ''))}</b><span class="sub">${esc(tipC.brand)} / ${year(tipC) || '—'} / ${money(tp.x)}</span><div class="lv">Spec level <b style="display:inline;font-size:12px">${tp.y}</b></div>${reasonList(tipC.level)}</div></div>` : '';
+        // The card stays in the page with its last content and fades out where it was when the dot is left.
+        if (card) lastCard = card;
+        const tip = card || (lastCard ? lastCard.replace('class="tip on"', 'class="tip"') : '<div class="tip"></div>');
+        return `<div class="chart" data-chart="${esc(focus || '')}"><svg viewBox="0 0 ${W} ${H}"><line x1="${L}" x2="${L}" y1="${TP}" y2="${H - B}" stroke="var(--muted)" stroke-width="1.5"/><line x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}" stroke="var(--muted)" stroke-width="1.5"/>${grid}${dots}</svg>${tip}
+          <div class="tools"><button class="ghost" data-zoom="in" title="Zoom in">+</button><button class="ghost" data-zoom="out" title="Zoom out">−</button><button class="ghost" data-zoom="reset" title="Show all">⤢</button></div>
+          <div class="legend">${focus ? `<span><i style="background:var(--accent)"></i>${esc(V.cameras.find((c) => c.id === focus)?.name || '')}</span><span><i style="background:var(--muted);opacity:.4"></i>Other cameras</span>` : '<span><i style="background:var(--muted);opacity:.4"></i>Cameras: hover a dot, click to open it</span>'}</div></div>`;
+      }
+      function nice(x) { const p = 10 ** Math.floor(Math.log10(x)); const m = x / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+      function zoom(kind) {
+        if (!Z) return;
+        if (kind === 'reset') { Z = null; return draw(); }
+        const f = kind === 'in' ? 0.7 : 1 / 0.7, cx = (Z.x0 + Z.x1) / 2, cy = (Z.y0 + Z.y1) / 2;
+        Z = { ...Z, x0: cx - ((Z.x1 - Z.x0) * f) / 2, x1: cx + ((Z.x1 - Z.x0) * f) / 2, y0: Math.max(0, cy - ((Z.y1 - Z.y0) * f) / 2), y1: Math.min(100, cy + ((Z.y1 - Z.y0) * f) / 2) };
+        draw();
+      }
+      function chartPage() {
+        return `<section class="op-card"><header><h2>Spec Level</h2><p>${esc(levelNote())} Price is today's new price where known, else the launch MSRP.</p></header><div class="op-body">${chart(null)}</div></section>`;
+      }
+
+      // ---- Data: the fetch, with a bar at every level.
+      // Pictures: a front and a back are required for every camera.
+      function readingBar() {
+        if (!readers.size && !V?.reading) return '';
+        return `<div class="bar"><div class="top"><b>Reading pages · ${readers.size} reader agents at work</b><span>${readLeft ?? V.reading} left to read</span></div><div class="op-meter"><span style="width:${pct(V.readTotal ? 1 - (readLeft ?? V.reading) / V.readTotal : 0)}"></span></div></div>`;
+      }
+      function pictureBar() {
+        const r = V.review || {}, need = (V.progress?.coverage?.length || 0) * 2, have = (V.progress?.coverage || []).reduce((n, c) => n + (c.cells.front?.state === 'saved') + (c.cells.back?.state === 'saved'), 0);
+        const agent = r.run ? `reviewing agent running · ${review?.steps?.length || 0} tool calls` : r.waiting ? 'starting the reviewing agent' : '';
+        return `<div class="bar"><div class="top"><b>Pictures · ${have}/${need} approved (front and back required)</b><span>${r.waiting || 0} waiting for review · ${r.rejected || 0} rejected</span></div><div class="op-meter"><span style="width:${pct(need ? have / need : 0)}"></span></div></div>${agent ? `<div class="doing">${esc(agent)}</div>` : ''}`;
+      }
+      const COLS = () => [...V.sources, { key: 'front', title: 'Front image', owner: 'Required: transparent, over 1,000 px long edge, body only, straight on' }, { key: 'back', title: 'Back image', owner: 'Required: transparent, over 1,000 px long edge, body only, straight on' }];
+      // The evaluation: the run against the golden set (three cameras from the makers' own sheets), and each
+      // camera's green count.
+      let EVAL = null, evalBusy = false;
+      function evalCard() {
+        const head = `<header><h2>Evaluation</h2><p>Every value of the Nikon Z5 IIC, Canon EOS R8 Mark II and Sony a7R VI checked against a golden set taken from the makers' own spec sheets; and how many of each camera's specs three or more independent sources agree on.</p></header>`;
+        if (!EVAL) return `<section class="op-card">${head}<div class="op-body"><button data-act="evaluate" ${evalBusy ? 'disabled' : ''}>${evalBusy ? 'Evaluating…' : 'Evaluate'}</button></div></section>`;
+        return `<section class="op-card">${head}<div class="op-body" style="display:grid;gap:8px"><div><b>${EVAL.accuracy ?? '—'}%</b> of the golden set right (${EVAL.right} of ${EVAL.total})</div><div><button class="ghost" data-act="evaluate">Evaluate again</button></div></div>
+          <div class="wide"><table class="op-table"><thead><tr><th>Camera</th><th class="num">Green</th><th class="num">Disputed</th></tr></thead><tbody>${EVAL.cameras.map((c) => `<tr><td>${esc(c.camera)}</td><td class="num">${c.green}/${c.of}</td><td class="num">${c.disputed || ''}</td></tr>`).join('')}</tbody></table></div>
+          ${EVAL.misses.length ? `<div class="wide"><table class="op-table"><thead><tr><th>Golden camera</th><th>Spec</th><th>Should be</th><th>Atlas says</th></tr></thead><tbody>${EVAL.misses.map((m) => `<tr><td>${esc(m.camera)}</td><td>${esc(m.spec)}</td><td>${esc(m.want)}</td><td class="sub">${esc(m.got ?? 'nothing')} · ${esc(m.status)}</td></tr>`).join('')}</tbody></table></div>` : ''}</section>`;
+      }
+      function dataPage() {
+        const p = V.progress, running = V.busy || p?.run?.state === 'running';
+        const failed = p ? p.steps.reduce((n, s) => n + (s.failed || 0), 0) + p.steps.filter((s) => s.state === 'failed' && !s.failed).length : 0;
+        const actions = `<div class="actions"><button class="primary" data-act="fresh" ${running ? 'disabled' : ''}>Fetch from start</button><button data-act="resume" ${running || !p ? 'disabled' : ''}>Resume previous fetch</button>${failed ? `<button data-act="retry" ${running ? 'disabled' : ''}>Retry failed (${failed})</button>` : ''}<button class="ghost" data-act="reprocess" ${running || !p ? 'disabled' : ''}>Reprocess saved pages</button></div>`;
+        let bars = '<div class="op-empty">No fetch yet. Fetch from start reads B&H\'s listings to find the newest camera bodies, then every source for each.</div>';
+        if (p) {
+          const doneSteps = p.steps.filter((s) => ['done', 'partial', 'skipped', 'failed'].includes(s.state)).length;
+          const cur = p.steps.find((s) => s.state === 'running') || p.steps.find((s) => s.state === 'pending' || s.state === 'failed');
+          const curShare = cur && cur.total ? cur.done / cur.total : 0;
+          const state = { running: 'Running', stopped: 'Stopped', done: 'Finished', partial: 'Finished with gaps' }[p.run.state] || p.run.state;
+          bars = `<div class="bars">
+            <div class="bar"><div class="top"><b>${state}${cur ? ` · step ${cur.index}/${cur.of} › ${esc(cur.title)}` : ''}</b><span>${doneSteps}/${p.steps.length} steps</span></div><div class="op-meter"><span style="width:${pct((doneSteps + (cur?.state === 'running' ? curShare : 0)) / p.steps.length)}"></span></div></div>
+            ${cur && cur.total ? `<div class="bar nested"><div class="top"><span style="text-align:left">Step ${cur.index}/${cur.of} › ${cur.done + (cur.failed || 0)}/${cur.total} ${cur.key === 'discover' ? 'pages' : cur.key === 'corpus' ? '' : 'tasks'}</span><span>${pct(curShare)}</span></div><div class="op-meter"><span style="width:${pct(curShare)}"></span></div></div>` : ''}
+            ${cur?.group && cur.group.n ? `<div class="bar nested" style="margin-left:36px"><div class="top"><span style="text-align:left">${esc(cur.group.label || '')} ${cur.group.i}/${cur.group.n} › ${esc(cur.group.name || '')}${cur.group.sub ? ` › ${esc(cur.group.subLabel || '')} ${cur.group.subI ? `${cur.group.subI}/${cur.group.total} ` : ''}${esc(cur.group.sub)}` : ''}</span><span>${cur.group.total ? `${cur.group.done}/${cur.group.total}` : ''}</span></div><div class="op-meter"><span style="width:${pct(cur.group.total ? cur.group.done / cur.group.total : cur.group.i / cur.group.n)}"></span></div></div>` : ''}
+            ${cur?.doing && running ? `<div class="doing">${esc(cur.doing)}</div>` : ''}
+            ${p.run.error ? `<div class="op-callout" data-tone="bad">${esc(p.run.error)}</div>` : ''}
+            ${readingBar()}
+            ${pictureBar()}
+          </div>`;
+        }
+        const steps = p ? `<div class="wide"><table class="op-table steps"><thead><tr><th>Step</th><th>Progress</th><th>State</th></tr></thead><tbody>${p.steps.map((s) => `<tr><td><b>${s.index}. ${esc(s.title)}</b><small>${esc(s.summary || '')}</small>${s.error ? `<small class="bad">${esc(s.error)}</small>` : ''}${s.failures?.length ? `<details><summary class="sub">${s.failures.length} failed</summary>${s.failures.map((f) => `<small class="bad">${esc(f.where)}: ${esc(f.error)}</small>`).join('')}</details>` : ''}</td><td class="num"><span class="op-meter"><span style="width:${pct(s.total ? (s.done + (s.failed || 0)) / s.total : 0)}"></span></span>${s.total ? `${s.done}/${s.total}` : ''}</td><td><span class="op-tag" data-tone="${{ done: 'ok', partial: 'warn', failed: 'bad', skipped: 'warn', running: 'info' }[s.state] || ''}">${esc(s.state)}</span></td></tr>`).join('')}</tbody></table></div>` : '';
+        const cov = p?.coverage?.length ? `<section class="op-card"><header><h2>Coverage</h2><p>Each camera on each source: <span class="dot" data-s="saved"></span> saved · <span class="dot" data-s="missing"></span> not on that source · <span class="dot" data-s="failed"></span> failed · <span class="dot"></span> waiting.</p></header>
+          <div class="wide"><table class="op-table cov"><thead><tr><th>Camera</th>${COLS().map((s) => `<th title="${esc(s.owner)}${s.trusted ? ' (trusted)' : ''}">${esc(s.title)}</th>`).join('')}</tr></thead><tbody>${p.coverage.map((c) => `<tr><td>${esc(c.name)}</td>${COLS().map((s) => { const x = c.cells[s.key] || { state: 'none' }; return `<td title="${esc(x.why || x.url || x.state)}">${x.url && x.state === 'saved' ? `<a href="${esc(x.url)}" target="_blank" rel="noopener"><span class="dot" data-s="saved"></span></a>` : `<span class="dot" data-s="${x.state}"></span>`}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div></section>` : '';
+        const st = V.settings;
+        const corpus = `<section class="op-card"><header><h2>Corpus</h2><p>Which cameras the next fetch covers: the newest camera bodies on B&H (body only, any type or sensor), plus any named here.</p></header><div class="op-body" style="display:grid;gap:10px">
+          <label class="sub">How many of the newest <input type="number" min="1" max="400" data-set="size" value="${st.size}" style="width:80px"></label>
+          <div class="two"><label class="sub">Also include (one per line)<textarea data-set="include" rows="3">${esc(st.include.join('\n'))}</textarea></label><label class="sub">Leave out (one per line)<textarea data-set="exclude" rows="3">${esc(st.exclude.join('\n'))}</textarea></label></div>
+          <div><button data-act="corpus">Save corpus settings</button></div></div></section>`;
+        return `${evalCard()}<section class="op-card"><header><h2>Fetch</h2><p>Every step and its data are kept: Resume goes on from the first step that stopped, Retry runs only what failed and then what depends on it, Reprocess re-reads the saved Markdown without the web.</p></header><div class="op-body" style="display:grid;gap:16px">${actions}${bars}</div>${steps}</section>${cov}${corpus}`;
+      }
+
+      function draw() {
+        // The workflow's runs: a graph of its own, outside what morph redraws, shown on the Runs tab.
+        document.getElementById('runs').hidden = !(tab === 'runs' && !camId);
+        if (!V) return morph(root, `${header()}${err ? `<div class="op-callout" data-tone="bad">${esc(err)}</div>` : ''}`);
+        const body = camId ? cameraPage() : tab === 'runs' ? '' : tab === 'compare' ? compare() : tab === 'chart' ? chartPage() : tab === 'data' ? dataPage() : cameraGrid();
+        morph(root, `${header()}${err ? `<div class="op-callout" data-tone="bad">${esc(err)}</div>` : ''}${body}`);
+      }
+      async function openCam(id) {
+        camId = id; open = new Set(); Z = null; hover = null; go(); draw();
+        try { full = await call('camera', { id }); } catch { full = null; }
+        draw();
+        try { BIG[id] = (await call('pictures', { id }))?.[id] || {}; draw(); } catch {}
+      }
+      root.addEventListener('click', async (e) => {
+        const t = e.target.closest('[data-tab],[data-cam],[data-back],[data-cmp],[data-spec],[data-sort],[data-zoom],[data-act],[data-pt]');
+        if (!t) return;
+        if (t.dataset.tab) { tab = t.dataset.tab; camId = null; Z = null; go(); return draw(); }
+        if (t.dataset.pt) return openCam(t.dataset.pt);
+        if (t.dataset.cam) { e.preventDefault(); return openCam(t.dataset.cam); }
+        if (t.hasAttribute('data-back')) { camId = null; go(); return draw(); }
+        if (t.dataset.cmp) { e.stopPropagation(); const id = t.dataset.cmp; cmp = cmp.includes(id) ? cmp.filter((x) => x !== id) : [...cmp, id].slice(-4); return draw(); }
+        if (t.dataset.spec) { const k = t.dataset.spec; open.has(k) ? open.delete(k) : open.add(k); return draw(); }
+        if (t.dataset.sort) { const k = t.dataset.sort; sort = { k, dir: sort.k === k ? -sort.dir : -1 }; return draw(); }
+        if (t.dataset.zoom) return zoom(t.dataset.zoom);
+        const act = t.dataset.act;
+        if (act === 'fresh') return load('start_fetch', { fresh: true });
+        if (act === 'resume') return load('start_fetch', { fresh: false });
+        if (act === 'retry') return load('retry_failed');
+        if (act === 'reprocess') return load('reprocess');
+        if (act === 'evaluate') { evalBusy = true; draw(); try { EVAL = await call('evaluate'); } catch (x) { err = x.message; } evalBusy = false; return draw(); }
+        if (act === 'corpus') {
+          const v = (k) => root.querySelector(`[data-set="${k}"]`).value;
+          const lines = (s) => s.split('\n').map((x) => x.trim()).filter(Boolean);
+          try { await call('set_corpus', { size: Number(v('size')) || 10, include: lines(v('include')), exclude: lines(v('exclude')) }); } catch (x) { err = x.message; }
+          return load();
+        }
+      });
+      root.addEventListener('change', (e) => {
+        if (e.target.matches('[data-add]') && e.target.value) { cmp = [...cmp, e.target.value].slice(-4); draw(); }
+        if (e.target.matches('[data-diff]')) { diffOnly = e.target.checked; draw(); }
+      });
+      // The card shows only while the pointer is on a dot: anywhere else (off the dot, off the chart, out of the
+      // page or the window) it fades out.
+      const setHover = (id) => { if (id !== hover) { hover = id; draw(); } };
+      document.addEventListener('pointermove', (e) => setHover(e.target.closest?.('[data-pt]')?.dataset.pt ?? null));
+      document.documentElement.addEventListener('pointerleave', () => setHover(null));
+      window.addEventListener('blur', () => setHover(null));
+      window.addEventListener('scroll', () => setHover(null), true);
+      root.addEventListener('wheel', (e) => { if (e.target.closest('.chart svg')) { e.preventDefault(); zoom(e.deltaY < 0 ? 'in' : 'out'); } }, { passive: false });
+
+      // Every tab and camera is a link: #/app/cambench/<tab> (/compare, /spec-level, /data, /runs) or /camera/<id>.
+      // A click shows the screen at once, then the address follows (the app kit's globalThis.opRoute); a link opened,
+      // Back or Forward shows the screen it names.
+      const PATHS = { cameras: '', compare: '/compare', chart: '/spec-level', data: '/data', runs: '/runs' };
+      const here = () => (camId ? `/camera/${camId}` : PATHS[tab] ?? '');
+      function go() { const u = globalThis.opRoute?.url(here()); if (u && globalThis.opRoute.path !== here()) app.openLink({ url: u }).catch(() => {}); }
+      function place(path) {
+        const c = /^\/camera\/(.+)$/.exec(path || '');
+        const t = Object.keys(PATHS).find((k) => PATHS[k] === (path || '').replace(/\/$/, ''));
+        if (c) { if (camId !== c[1]) openCam(c[1]); return; }
+        camId = null; Z = null; tab = t || 'cameras';
+        draw();
+      }
+      globalThis.opRoute?.onChange((r) => r.path !== here() && place(r.path));
+
+      let shown = false;
+      app.ontoolresult = (r) => { if (r.structuredContent?.specs) { shown = true; V = r.structuredContent; draw(); schedule(); loadPics(); } };
+      await app.connect();
+      document.querySelector('outpost-workflow-graph').app = app;
+      if (globalThis.opRoute?.path) place(globalThis.opRoute.path);
+      setTimeout(() => { if (!shown) load(); }, 300);
+    </script>
+  </body>
+</html>

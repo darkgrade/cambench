@@ -1,0 +1,495 @@
+{
+ "about": "Ground truth for three cameras, each value decided by the dictionary's definition from the maker's own specifications and checked against at least two independent sheets (B&H, DPReview, Crutchfield and others). Built 2026-11-05 by reading those sheets; the reasoning for disputed values is in notes.",
+ "cameras": {
+  "nikon:z5iic": {
+   "values": {
+    "type": "Mirrorless",
+    "mount": "Nikon Z",
+    "sensor": {
+     "format": "Full frame",
+     "w": 35.9,
+     "h": 23.9
+    },
+    "mp": {
+     "n": 24.5
+    },
+    "ibis": true,
+    "announced": "2026-09-24",
+    "msrp": {
+     "n": 1399.95,
+     "currency": "USD"
+    },
+    "af_points": {
+     "n": 273
+    },
+    "screen_size": {
+     "n": 3.2,
+     "unit": "in"
+    },
+    "screen_dots": {
+     "n": 1040000,
+     "unit": "dots"
+    },
+    "screen_type": "Fully articulated",
+    "touch": true,
+    "evf": "None",
+    "battery": "EN-EL15c",
+    "battery_life": {
+     "n": 350
+    },
+    "weight": {
+     "n": 620,
+     "unit": "g"
+    },
+    "weight_body": {
+     "n": 538,
+     "unit": "g"
+    },
+    "dims": {
+     "w": 134.0,
+     "h": 80.5,
+     "d": 72.0,
+     "unit": "mm"
+    },
+    "sealed": true,
+    "iso_max": {
+     "n": 64000
+    },
+    "iso_ext": {
+     "n": 204800
+    },
+    "still_res": {
+     "w": 6048,
+     "h": 4032,
+     "unit": "px"
+    },
+    "shutter_mech": "1/8000",
+    "shutter_elec": "1/8000",
+    "shutter_min": "30",
+    "burst": {
+     "n": 30
+    },
+    "raw_bits": {
+     "n": 14
+    },
+    "still_formats": [
+     "RAW",
+     "JPEG",
+     "HEIF"
+    ],
+    "video_modes": [
+     {
+      "w": 4032,
+      "h": 2268,
+      "fps": [
+       30,
+       25,
+       24
+      ]
+     },
+     {
+      "w": 3984,
+      "h": 2240,
+      "fps": [
+       30,
+       25,
+       24
+      ]
+     },
+     {
+      "w": 3840,
+      "h": 2160,
+      "fps": [
+       60,
+       50,
+       30,
+       25,
+       24
+      ]
+     },
+     {
+      "w": 1920,
+      "h": 1080,
+      "fps": [
+       120,
+       100,
+       60,
+       50,
+       30,
+       25,
+       24
+      ]
+     }
+    ],
+    "video_formats": [
+     "N-RAW",
+     "H.265",
+     "H.264"
+    ],
+    "video_bits": {
+     "n": 12
+    },
+    "slots": [
+     [
+      "SD UHS-II"
+     ]
+    ],
+    "wifi": "Wi-Fi 5",
+    "bluetooth": "5.0",
+    "gps": false,
+    "ports": [
+     "USB-C",
+     "HDMI (Micro)",
+     "Microphone 3.5 mm",
+     "Headphone 3.5 mm",
+     "Remote"
+    ],
+    "webcam": true,
+    "webcam_res": [
+     {
+      "w": 1920,
+      "h": 1080,
+      "fps": [
+       60,
+       30
+      ]
+     }
+    ]
+   },
+   "notes": {
+    "af_points": "273 selectable single-point (FX); 299 is auto-area.",
+    "evf": "No viewfinder: evf_dots and evf_mag do not apply.",
+    "sealed": "Nikon: dust- and drip-resistance; DPReview's 'No' is a default field.",
+    "shutter_mech": "DPReview's 1/4000 is wrong.",
+    "battery_life": "CIPA, energy saving off; 390 with it on.",
+    "burst": "30 fps High-Speed Frame Capture + C30, JPEG Large."
+   }
+  },
+  "canon:r8ii": {
+   "values": {
+    "type": "Mirrorless",
+    "mount": "Canon RF",
+    "sensor": {
+     "format": "Full frame",
+     "w": 36.0,
+     "h": 24.0
+    },
+    "mp": {
+     "n": 24.2
+    },
+    "ibis": true,
+    "announced": "2026-09-15",
+    "msrp": {
+     "n": 1899,
+     "currency": "USD"
+    },
+    "af_points": {
+     "n": 4368
+    },
+    "screen_size": {
+     "n": 3.0,
+     "unit": "in"
+    },
+    "screen_dots": {
+     "n": 1620000,
+     "unit": "dots"
+    },
+    "screen_type": "Fully articulated",
+    "touch": true,
+    "evf": "Electronic",
+    "evf_dots": {
+     "n": 2360000,
+     "unit": "dots"
+    },
+    "evf_mag": {
+     "n": 0.7
+    },
+    "battery": "LP-E17",
+    "battery_life": {
+     "n": 340
+    },
+    "weight": {
+     "n": 546,
+     "unit": "g"
+    },
+    "weight_body": {
+     "n": 499,
+     "unit": "g"
+    },
+    "dims": {
+     "w": 131.4,
+     "h": 90.0,
+     "d": 79.7,
+     "unit": "mm"
+    },
+    "sealed": true,
+    "iso_max": {
+     "n": 102400
+    },
+    "iso_ext": {
+     "n": 204800
+    },
+    "still_res": {
+     "w": 6000,
+     "h": 4000,
+     "unit": "px"
+    },
+    "shutter_mech": "1/4000",
+    "shutter_elec": "1/16000",
+    "shutter_min": "30",
+    "burst": {
+     "n": 40
+    },
+    "raw_bits": {
+     "n": 14
+    },
+    "still_formats": [
+     "RAW",
+     "JPEG",
+     "HEIF"
+    ],
+    "video_modes": [
+     {
+      "w": 3840,
+      "h": 2160,
+      "fps": [
+       23.98,
+       25,
+       29.97,
+       50,
+       59.94
+      ]
+     },
+     {
+      "w": 1920,
+      "h": 1080,
+      "fps": [
+       23.98,
+       25,
+       29.97,
+       50,
+       59.94,
+       100,
+       119.88,
+       150,
+       179.82
+      ]
+     }
+    ],
+    "video_formats": [
+     "H.264",
+     "H.265",
+     "XF-AVC"
+    ],
+    "video_bits": {
+     "n": 10
+    },
+    "slots": [
+     [
+      "SD UHS-II"
+     ]
+    ],
+    "wifi": "Wi-Fi 6",
+    "bluetooth": "5.3",
+    "gps": false,
+    "ports": [
+     "USB-C",
+     "HDMI (Micro)",
+     "Microphone 3.5 mm",
+     "Headphone 3.5 mm",
+     "Remote"
+    ],
+    "webcam": true,
+    "webcam_res": [
+     {
+      "w": 3840,
+      "h": 2160,
+      "fps": [
+       30,
+       60
+      ]
+     }
+    ]
+   },
+   "notes": {
+    "af_points": "4368 selectable positions for stills; 1053 automatic zones.",
+    "shutter_mech": "No fully mechanical shutter: electronic first curtain to 1/4000 counts.",
+    "battery_life": "Canon's spec sheet publishes 340 (LCD); its 'Smooth' mode gives 270.",
+    "wifi": "Canon Europe lists 802.11ac; Canon USA, the press release, B&H and Crutchfield: 802.11ax (Wi-Fi 6).",
+    "ports": "B&H's PC sync port is wrong (Canon: Flash Sync Terminal not supported)."
+   }
+  },
+  "sony:a7rvi": {
+   "values": {
+    "type": "Mirrorless",
+    "mount": "Sony E",
+    "sensor": {
+     "format": "Full frame",
+     "w": 35.9,
+     "h": 24.0
+    },
+    "mp": {
+     "n": 66.8
+    },
+    "ibis": true,
+    "announced": "2026-05-13",
+    "msrp": {
+     "n": 4499.99,
+     "currency": "USD"
+    },
+    "af_points": {
+     "n": 759
+    },
+    "screen_size": {
+     "n": 3.2,
+     "unit": "in"
+    },
+    "screen_dots": {
+     "n": 2095104,
+     "unit": "dots"
+    },
+    "screen_type": "Multi-angle",
+    "touch": true,
+    "evf": "Electronic",
+    "evf_dots": {
+     "n": 9437184,
+     "unit": "dots"
+    },
+    "evf_mag": {
+     "n": 0.9
+    },
+    "battery": "NP-SA100",
+    "battery_life": {
+     "n": 710
+    },
+    "weight": {
+     "n": 713,
+     "unit": "g"
+    },
+    "weight_body": {
+     "n": 622,
+     "unit": "g"
+    },
+    "dims": {
+     "w": 132.7,
+     "h": 96.9,
+     "d": 82.9,
+     "unit": "mm"
+    },
+    "sealed": true,
+    "iso_max": {
+     "n": 32000
+    },
+    "iso_ext": {
+     "n": 102400
+    },
+    "still_res": {
+     "w": 9984,
+     "h": 6656,
+     "unit": "px"
+    },
+    "shutter_mech": "1/8000",
+    "shutter_elec": "1/8000",
+    "shutter_min": "30",
+    "burst": {
+     "n": 30
+    },
+    "raw_bits": {
+     "n": 14
+    },
+    "still_formats": [
+     "RAW",
+     "JPEG",
+     "HEIF"
+    ],
+    "video_modes": [
+     {
+      "w": 7680,
+      "h": 4320,
+      "fps": [
+       23.98,
+       25,
+       29.97
+      ]
+     },
+     {
+      "w": 3840,
+      "h": 2160,
+      "fps": [
+       23.98,
+       25,
+       29.97,
+       50,
+       59.94,
+       100,
+       119.88
+      ]
+     },
+     {
+      "w": 1920,
+      "h": 1080,
+      "fps": [
+       23.98,
+       25,
+       29.97,
+       50,
+       59.94,
+       100,
+       119.88
+      ]
+     }
+    ],
+    "video_formats": [
+     "H.264",
+     "H.265",
+     "XAVC S",
+     "XAVC HS",
+     "XAVC S-I"
+    ],
+    "video_bits": {
+     "n": 10
+    },
+    "slots": [
+     [
+      "CFexpress Type A",
+      "SD UHS-II"
+     ],
+     [
+      "CFexpress Type A",
+      "SD UHS-II"
+     ]
+    ],
+    "wifi": "Wi-Fi 6E",
+    "bluetooth": "5.3",
+    "gps": false,
+    "ports": [
+     "USB-C",
+     "HDMI (Full)",
+     "Microphone 3.5 mm",
+     "Headphone 3.5 mm",
+     "Flash sync (PC)"
+    ],
+    "webcam": true,
+    "webcam_res": [
+     {
+      "w": 3840,
+      "h": 2160,
+      "fps": [
+       12.5,
+       15,
+       25,
+       30
+      ]
+     }
+    ]
+   },
+   "notes": {
+    "sensor": "DPReview's 35.7 x 23.8 is wrong.",
+    "screen_type": "4-axis multi-angle; DPReview's 'fully articulated' is wrong.",
+    "video_modes": "8K is 7680x4320 (DPReview's 8192 is wrong).",
+    "wifi": "802.11ax including the 6 GHz band = Wi-Fi 6E.",
+    "msrp": "$4,499.99 per Sony's press release."
+   }
+  }
+ }
+}

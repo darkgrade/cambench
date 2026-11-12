@@ -1,0 +1,4800 @@
+{
+  "benchmark": "cambench",
+  "version": 1,
+  "date": "2026-11-12T11:34:17.027Z",
+  "run": {},
+  "specs": [
+    {
+      "id": "type",
+      "label": "Type",
+      "group": "Overview",
+      "kind": "enum",
+      "tip": "The body type."
+    },
+    {
+      "id": "mount",
+      "label": "Lens mount",
+      "group": "Overview",
+      "kind": "enum",
+      "tip": "The lens mount on the body."
+    },
+    {
+      "id": "sensor",
+      "label": "Sensor size",
+      "group": "Overview",
+      "kind": "sensor",
+      "tip": "The sensor format, and its width and height in mm where the page states them."
+    },
+    {
+      "id": "mp",
+      "label": "Sensor resolution",
+      "group": "Overview",
+      "kind": "number",
+      "tip": "Effective megapixels (not total or \"actual\" pixels)."
+    },
+    {
+      "id": "ibis",
+      "label": "In-body stabilization",
+      "group": "Overview",
+      "kind": "bool",
+      "tip": "Whether the sensor is stabilized in the body (sensor-shift / IBIS). Electronic or digital stabilization for video only is false. The stops rating, if stated, goes in \"note\"."
+    },
+    {
+      "id": "announced",
+      "label": "Initial release date",
+      "group": "Overview",
+      "kind": "date",
+      "tip": "The day the maker announced the camera (its press release date). Not an on-sale or shipping date."
+    },
+    {
+      "id": "msrp",
+      "label": "Initial release MSRP",
+      "group": "Price",
+      "kind": "money",
+      "tip": "The US launch price of the body alone, in US dollars, as announced."
+    },
+    {
+      "id": "price_new",
+      "label": "Current new price",
+      "group": "Price",
+      "kind": "money",
+      "tip": "This retailer's current price for the body alone, new, in US dollars."
+    },
+    {
+      "id": "price_used",
+      "label": "Current used price",
+      "group": "Price",
+      "kind": "money",
+      "tip": "This seller's current price for a used body alone, in US dollars."
+    },
+    {
+      "id": "af_points",
+      "label": "AF points",
+      "group": "Autofocus",
+      "kind": "number",
+      "tip": "The most AF positions or points that can be selected for stills, as the maker counts them (\"AF positions\", \"focus points\", \"AF points\"). Not automatic AF zones, not video positions, not cross-type counts: put those in \"note\"."
+    },
+    {
+      "id": "screen_size",
+      "label": "Display size",
+      "group": "Display",
+      "kind": "number",
+      "tip": "The rear screen diagonal."
+    },
+    {
+      "id": "screen_dots",
+      "label": "Display resolution",
+      "group": "Display",
+      "kind": "number",
+      "tip": "The rear screen resolution in dots."
+    },
+    {
+      "id": "screen_type",
+      "label": "Display articulation",
+      "group": "Display",
+      "kind": "enum",
+      "tip": "How the rear screen moves: Fully articulated (side-hinged, vari-angle, flip-out), Tilting (up/down only), Multi-angle (tilts and flips, e.g. 4-axis or tilt-and-free-angle), or Fixed."
+    },
+    {
+      "id": "touch",
+      "label": "Touchscreen",
+      "group": "Display",
+      "kind": "bool",
+      "tip": "Whether the rear screen is a touchscreen."
+    },
+    {
+      "id": "evf",
+      "label": "Viewfinder",
+      "group": "Viewfinder",
+      "kind": "enum",
+      "tip": "A built-in viewfinder. An optional, attachable accessory viewfinder is \"None\"."
+    },
+    {
+      "id": "evf_dots",
+      "label": "Viewfinder resolution",
+      "group": "Viewfinder",
+      "kind": "number",
+      "tip": "The built-in viewfinder resolution in dots (never an optional accessory viewfinder)."
+    },
+    {
+      "id": "evf_mag",
+      "label": "Viewfinder magnification",
+      "group": "Viewfinder",
+      "kind": "number",
+      "tip": "Built-in viewfinder magnification (with a 50 mm lens at infinity, 35 mm equivalent)."
+    },
+    {
+      "id": "battery",
+      "label": "Battery type",
+      "group": "Body",
+      "kind": "text",
+      "tip": "The battery's model code."
+    },
+    {
+      "id": "battery_life",
+      "label": "Battery life (CIPA)",
+      "group": "Body",
+      "kind": "number",
+      "tip": "CIPA-rated shots per charge using the rear screen (LCD), as the maker's spec sheet publishes it (not a viewfinder figure). Other modes go in \"note\"."
+    },
+    {
+      "id": "weight",
+      "label": "Weight",
+      "group": "Body",
+      "kind": "number",
+      "tip": "Weight with battery and memory card (CIPA)."
+    },
+    {
+      "id": "weight_body",
+      "label": "Weight (body only)",
+      "group": "Body",
+      "kind": "number",
+      "tip": "Weight of the body alone, without battery or card."
+    },
+    {
+      "id": "dims",
+      "label": "Dimensions",
+      "group": "Body",
+      "kind": "dims",
+      "tip": "Width × height × depth of the body."
+    },
+    {
+      "id": "sealed",
+      "label": "Weatherproofing",
+      "group": "Body",
+      "kind": "bool",
+      "tip": "Whether the body is dust- and moisture-resistant (weather-sealed). \"Waterproof: No\" says nothing about sealing."
+    },
+    {
+      "id": "iso_max",
+      "label": "Max ISO (native)",
+      "group": "Photo",
+      "kind": "number",
+      "tip": "The highest native (standard, not expanded) ISO for stills."
+    },
+    {
+      "id": "iso_ext",
+      "label": "Max ISO (with expansion)",
+      "group": "Photo",
+      "kind": "number",
+      "tip": "The highest ISO selectable for stills, expanded/extended/boosted settings included. When the camera has no expanded range above its native maximum, that maximum."
+    },
+    {
+      "id": "still_res",
+      "label": "Max still resolution",
+      "group": "Photo",
+      "kind": "dims",
+      "tip": "The largest still image size in pixels (width × height), from the sensor (not pixel-shift composites)."
+    },
+    {
+      "id": "shutter_mech",
+      "label": "Fastest shutter (mechanical)",
+      "group": "Photo",
+      "kind": "shutter",
+      "tip": "The fastest speed of the mechanical shutter (or mechanical with electronic first curtain). \"None\" when the camera has no mechanical shutter."
+    },
+    {
+      "id": "shutter_elec",
+      "label": "Fastest shutter (electronic)",
+      "group": "Photo",
+      "kind": "shutter",
+      "tip": "The fastest speed of the fully electronic shutter, for stills. Never an electronic front-curtain figure."
+    },
+    {
+      "id": "shutter_min",
+      "label": "Slowest shutter",
+      "group": "Photo",
+      "kind": "shutter",
+      "tip": "The slowest timed shutter speed (not bulb or time limits)."
+    },
+    {
+      "id": "burst",
+      "label": "Max burst",
+      "group": "Photo",
+      "kind": "number",
+      "tip": "The fastest continuous shooting at full resolution, any shutter (pre-capture included if at full resolution)."
+    },
+    {
+      "id": "raw_bits",
+      "label": "RAW bit depth",
+      "group": "Photo",
+      "kind": "number",
+      "tip": "The bit depth of still RAW files (not video)."
+    },
+    {
+      "id": "still_formats",
+      "label": "Still file formats",
+      "group": "Photo",
+      "kind": "set",
+      "tip": "Still image file formats it records."
+    },
+    {
+      "id": "video_modes",
+      "label": "Movie capture formats",
+      "group": "Video",
+      "kind": "modes",
+      "tip": "Each internal recording frame size with its frame rates (not HDMI output, streaming or proxy sizes). Rates as stated (23.98, 59.94 are fine)."
+    },
+    {
+      "id": "video_max",
+      "label": "Max movie resolution",
+      "group": "Video",
+      "kind": "level",
+      "tip": "Derived: the largest agreed frame size at its fastest agreed rate."
+    },
+    {
+      "id": "video_formats",
+      "label": "Recording formats",
+      "group": "Video",
+      "kind": "set",
+      "tip": "Internal video codecs (not containers such as MP4 or MOV, not compression modes such as Long GOP or All-Intra, not codecs only available over HDMI to an external recorder)."
+    },
+    {
+      "id": "video_bits",
+      "label": "Video bit depth",
+      "group": "Video",
+      "kind": "number",
+      "tip": "The highest internal video bit depth (RAW video included)."
+    },
+    {
+      "id": "slots",
+      "label": "Card slots",
+      "group": "Storage",
+      "kind": "slots",
+      "tip": "One entry per card slot, each with every card type it takes."
+    },
+    {
+      "id": "wifi",
+      "label": "Wi-Fi",
+      "group": "Connectivity",
+      "kind": "level",
+      "tip": "Built-in Wi-Fi and its standard (802.11ax = Wi-Fi 6, ac = Wi-Fi 5, n = Wi-Fi 4). \"Yes\" when present but the standard is not stated; \"No\" when stated absent."
+    },
+    {
+      "id": "bluetooth",
+      "label": "Bluetooth",
+      "group": "Connectivity",
+      "kind": "level",
+      "tip": "Built-in Bluetooth and its version; \"Yes\" when the version is not stated; \"No\" when stated absent."
+    },
+    {
+      "id": "gps",
+      "label": "GPS (built-in)",
+      "group": "Connectivity",
+      "kind": "bool",
+      "tip": "Whether a GPS receiver is built in. Location from a connected phone app is false."
+    },
+    {
+      "id": "ports",
+      "label": "Ports",
+      "group": "Connectivity",
+      "kind": "set",
+      "tip": "Physical connectors on the body."
+    },
+    {
+      "id": "webcam",
+      "label": "UVC/UAC webcam",
+      "group": "Connectivity",
+      "kind": "bool",
+      "tip": "Whether it works as a standard USB webcam (UVC/UAC) without extra software."
+    },
+    {
+      "id": "webcam_res",
+      "label": "UVC/UAC max resolution",
+      "group": "Connectivity",
+      "kind": "modes",
+      "tip": "The best frame size and rate it streams as a USB webcam."
+    }
+  ],
+  "sources": [
+    {
+      "key": "vendor",
+      "title": "Manufacturer",
+      "owner": "maker",
+      "trusted": true
+    },
+    {
+      "key": "press",
+      "title": "Press release",
+      "owner": "maker",
+      "trusted": true
+    },
+    {
+      "key": "bh",
+      "title": "B&H",
+      "owner": "B&H",
+      "trusted": true
+    },
+    {
+      "key": "dpreview",
+      "title": "DPReview",
+      "owner": "DPReview",
+      "trusted": false
+    },
+    {
+      "key": "adorama",
+      "title": "Adorama",
+      "owner": "Adorama",
+      "trusted": false
+    },
+    {
+      "key": "crutchfield",
+      "title": "Crutchfield",
+      "owner": "Crutchfield",
+      "trusted": false
+    },
+    {
+      "key": "wex",
+      "title": "Wex",
+      "owner": "Wex",
+      "trusted": false
+    },
+    {
+      "key": "news",
+      "title": "Launch news",
+      "owner": "news",
+      "trusted": false
+    },
+    {
+      "key": "wikipedia",
+      "title": "Wikipedia",
+      "owner": "Wikipedia",
+      "trusted": false
+    },
+    {
+      "key": "mpb",
+      "title": "MPB (used)",
+      "owner": "MPB",
+      "trusted": false
+    },
+    {
+      "key": "ebay",
+      "title": "eBay (used)",
+      "owner": "eBay",
+      "trusted": false
+    }
+  ],
+  "method": {
+    "sources": "Every camera body B&H lists new, newest first. Each is looked up on the maker's own site and press release, B&H, DPReview, Adorama, Crutchfield, Wex, launch news, Wikipedia, MPB and eBay, and every page is kept as it was read.",
+    "reading": "Agents read each page against one dictionary of about 45 specs, quoting the words that state each value; a reading is kept only when its quote is on the page and its figures match.",
+    "verification": "A value is verified when independent sources (different owners: two sites of one company count once) agree; disagreements are adjudicated against each spec's definition.",
+    "level": "A 0–100 spec level from fixed scales per area (resolution, video, burst, viewfinder, stabilization, card slots, build and battery, autofocus, screen), weighted, with a reason per area."
+  },
+  "cameras": [
+    {
+      "id": "canon:r6iii",
+      "slug": "canon-r6iii",
+      "name": "Canon EOS R6 Mark III",
+      "brand": "Canon",
+      "rank": 1,
+      "price": 2599,
+      "level": 76,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r6iii-back.webp",
+        "front": "cameras/canon-r6iii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 32.5,
+          "text": "32.5 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-11-05",
+          "text": "2025-11-05"
+        }
+      }
+    },
+    {
+      "id": "sigma:fp2",
+      "slug": "sigma-fp2",
+      "name": "Sigma FP2",
+      "brand": "Sigma",
+      "rank": 2,
+      "price": 2199,
+      "level": 44,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sigma-fp2-back.webp",
+        "front": "cameras/sigma-fp2-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2026-10-23",
+          "text": "2026-10-23"
+        }
+      }
+    },
+    {
+      "id": "nikon:z5iic",
+      "slug": "nikon-z5iic",
+      "name": "Nikon Z5 IIC",
+      "brand": "Nikon",
+      "rank": 3,
+      "price": 1397,
+      "level": 52,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z5iic-back.webp",
+        "front": "cameras/nikon-z5iic-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2026-09-24",
+          "text": "2026-09-24"
+        }
+      }
+    },
+    {
+      "id": "canon:r8ii",
+      "slug": "canon-r8ii",
+      "name": "Canon EOS R8 Mark II",
+      "brand": "Canon",
+      "rank": 4,
+      "price": 1899,
+      "level": 56,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r8ii-back.webp",
+        "front": "cameras/canon-r8ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2026-09-15",
+          "text": "2026-09-15"
+        }
+      }
+    },
+    {
+      "id": "om-system:pen",
+      "slug": "om-system-pen",
+      "name": "OM System PEN",
+      "brand": "OM System",
+      "rank": 5,
+      "price": 1000,
+      "level": 37,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/om-system-pen-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.4,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.4 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.4,
+          "text": "20.4 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:gfx100iiir",
+      "slug": "fujifilm-gfx100iiir",
+      "name": "Fujifilm GFX100 II IR",
+      "brand": "Fujifilm",
+      "rank": 6,
+      "price": 10500,
+      "level": 69,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/fujifilm-gfx100iiir-back.webp",
+        "front": "cameras/fujifilm-gfx100iiir-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Medium format",
+            "w": 43.8,
+            "h": 32.9
+          },
+          "text": "Medium format (43.8 × 32.9 mm)"
+        },
+        "mp": {
+          "value": 102,
+          "text": "102 MP"
+        },
+        "mount": {
+          "value": "Fujifilm G",
+          "text": "Fujifilm G"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 8,
+          "text": "8 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "leica:sl3p",
+      "slug": "leica-sl3p",
+      "name": "Leica SL3-P",
+      "brand": "Leica",
+      "rank": 7,
+      "price": 6690,
+      "level": 75,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/leica-sl3p-back.webp",
+        "front": "cameras/leica-sl3p-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 44.9,
+          "text": "44.9 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2026-06-25",
+          "text": "2026-06-25"
+        }
+      }
+    },
+    {
+      "id": "leica:m11p",
+      "slug": "leica-m11p",
+      "name": "Leica M11-P",
+      "brand": "Leica",
+      "rank": 8,
+      "price": 10400,
+      "level": 39,
+      "coverage": 76,
+      "image": {
+        "back": "cameras/leica-m11p-back.webp",
+        "front": "cameras/leica-m11p-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2023-10-26",
+          "text": "2023-10-26"
+        }
+      }
+    },
+    {
+      "id": "sony:a7rvi",
+      "slug": "sony-a7rvi",
+      "name": "Sony a7R VI",
+      "brand": "Sony",
+      "rank": 9,
+      "price": 4500,
+      "level": 79,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/sony-a7rvi-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.7,
+            "h": 23.8
+          },
+          "text": "Full frame (35.7 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 66.8,
+          "text": "66.8 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2026-05-13",
+          "text": "2026-05-13"
+        }
+      }
+    },
+    {
+      "id": "canon:r6v",
+      "slug": "canon-r6v",
+      "name": "Canon EOS R6 V",
+      "brand": "Canon",
+      "rank": 10,
+      "price": 2499,
+      "level": 71,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/canon-r6v-front.webp",
+        "back": "cameras/canon-r6v-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 32.5,
+          "text": "32.5 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2026-05-13",
+          "text": "2026-05-13"
+        }
+      }
+    },
+    {
+      "id": "panasonic:g9ii",
+      "slug": "panasonic-g9ii",
+      "name": "Panasonic Lumix G9 II",
+      "brand": "Panasonic",
+      "rank": 11,
+      "price": 1498,
+      "level": 63,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/panasonic-g9ii-back.webp",
+        "front": "cameras/panasonic-g9ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 25.21,
+          "text": "25.21 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 75,
+          "text": "75 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-09-12",
+          "text": "2023-09-12"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s1rii",
+      "slug": "panasonic-s1rii",
+      "name": "Panasonic Lumix S1R II",
+      "brand": "Panasonic",
+      "rank": 12,
+      "price": 2998,
+      "level": 75,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/panasonic-s1rii-back.webp",
+        "front": "cameras/panasonic-s1rii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 44.3,
+          "text": "44.3 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-02-25",
+          "text": "2025-02-25"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s1iie",
+      "slug": "panasonic-s1iie",
+      "name": "Panasonic Lumix S1 IIE",
+      "brand": "Panasonic",
+      "rank": 13,
+      "price": 2098,
+      "level": 64,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/panasonic-s1iie-back.webp",
+        "front": "cameras/panasonic-s1iie-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.8
+          },
+          "text": "Full frame (35.8 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-05-13",
+          "text": "2025-05-13"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s5ii",
+      "slug": "panasonic-s5ii",
+      "name": "Panasonic Lumix S5 II",
+      "brand": "Panasonic",
+      "rank": 14,
+      "price": 1598,
+      "level": 58,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/panasonic-s5ii-back.webp",
+        "front": "cameras/panasonic-s5ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-01-04",
+          "text": "2023-01-04"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s5iix",
+      "slug": "panasonic-s5iix",
+      "name": "Panasonic Lumix S5 IIX",
+      "brand": "Panasonic",
+      "rank": 15,
+      "price": 1798,
+      "level": 59,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/panasonic-s5iix-back.webp",
+        "front": "cameras/panasonic-s5iix-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-01-04",
+          "text": "2023-01-04"
+        }
+      }
+    },
+    {
+      "id": "panasonic:gh7",
+      "slug": "panasonic-gh7",
+      "name": "Panasonic Lumix GH7",
+      "brand": "Panasonic",
+      "rank": 16,
+      "price": 1798,
+      "level": 66,
+      "coverage": 76,
+      "image": {
+        "front": "cameras/panasonic-gh7-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 25.21,
+          "text": "25.21 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 75,
+          "text": "75 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-06-05",
+          "text": "2024-06-05"
+        }
+      }
+    },
+    {
+      "id": "om-system:om3astro",
+      "slug": "om-system-om3astro",
+      "name": "OM System OM-3 ASTRO",
+      "brand": "OM System",
+      "rank": 17,
+      "price": 2500,
+      "level": 56,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/om-system-om3astro-back.webp",
+        "front": "cameras/om-system-om3astro-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.4,
+          "text": "20.4 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "burst": {
+          "value": 120,
+          "text": "120 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s1ii",
+      "slug": "panasonic-s1ii",
+      "name": "Panasonic Lumix S1 II",
+      "brand": "Panasonic",
+      "rank": 18,
+      "price": 2898,
+      "level": 71,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/panasonic-s1ii-back.webp",
+        "front": "cameras/panasonic-s1ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.8
+          },
+          "text": "Full frame (35.8 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.1,
+          "text": "24.1 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 70,
+          "text": "70 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "panasonic:s9",
+      "slug": "panasonic-s9",
+      "name": "Panasonic Lumix S9",
+      "brand": "Panasonic",
+      "rank": 19,
+      "price": 1498,
+      "level": 46,
+      "coverage": 82,
+      "image": {
+        "front": "cameras/panasonic-s9-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "sony:a7v",
+      "slug": "sony-a7v",
+      "name": "Sony a7 V",
+      "brand": "Sony",
+      "rank": 20,
+      "price": 2898,
+      "level": 66,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7v-back.webp",
+        "front": "cameras/sony-a7v-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 33,
+          "text": "33 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-12-02",
+          "text": "2025-12-02"
+        }
+      }
+    },
+    {
+      "id": "leica:sl3reporter",
+      "slug": "leica-sl3reporter",
+      "name": "Leica SL3 Reporter",
+      "brand": "Leica",
+      "rank": 21,
+      "price": 7995,
+      "level": 71,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/leica-sl3reporter-back.webp",
+        "front": "cameras/leica-sl3reporter-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame"
+          },
+          "text": "Full frame"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-11-06",
+          "text": "2025-11-06"
+        }
+      }
+    },
+    {
+      "id": "leica:mev1",
+      "slug": "leica-mev1",
+      "name": "Leica M EV1",
+      "brand": "Leica",
+      "rank": 22,
+      "price": 9290,
+      "level": 40,
+      "coverage": 76,
+      "image": {
+        "back": "cameras/leica-mev1-back.webp",
+        "front": "cameras/leica-mev1-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2025-10-23",
+          "text": "2025-10-23"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xt30iii",
+      "slug": "fujifilm-xt30iii",
+      "name": "Fujifilm X-T30 III",
+      "brand": "Fujifilm",
+      "rank": 23,
+      "price": 999,
+      "level": 34,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xt30iii-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 26.1,
+          "text": "26.1 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2025-10-23",
+          "text": "2025-10-23"
+        }
+      }
+    },
+    {
+      "id": "nikon:zf",
+      "slug": "nikon-zf",
+      "name": "Nikon Zf",
+      "brand": "Nikon",
+      "rank": 24,
+      "price": 2047,
+      "level": 49,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-zf-back.webp",
+        "front": "cameras/nikon-zf-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 14,
+          "text": "14 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-09-20",
+          "text": "2023-09-20"
+        }
+      }
+    },
+    {
+      "id": "hasselblad:x2dii100c",
+      "slug": "hasselblad-x2dii100c",
+      "name": "Hasselblad X2D II 100C",
+      "brand": "Hasselblad",
+      "rank": 25,
+      "price": 7799,
+      "level": 55,
+      "coverage": 74,
+      "image": {
+        "back": "cameras/hasselblad-x2dii100c-back.webp",
+        "front": "cameras/hasselblad-x2dii100c-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Medium format",
+            "w": 43.8,
+            "h": 32.9
+          },
+          "text": "Medium format (43.8 × 32.9 mm)"
+        },
+        "mp": {
+          "value": 100,
+          "text": "100 MP"
+        },
+        "mount": {
+          "value": "Hasselblad XCD",
+          "text": "Hasselblad XCD"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 3,
+          "text": "3 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "canon:r6ii",
+      "slug": "canon-r6ii",
+      "name": "Canon EOS R6 Mark II",
+      "brand": "Canon",
+      "rank": 26,
+      "price": 1999,
+      "level": 64,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/canon-r6ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2022-11-02",
+          "text": "2022-11-02"
+        }
+      }
+    },
+    {
+      "id": "canon:r8",
+      "slug": "canon-r8",
+      "name": "Canon EOS R8",
+      "brand": "Canon",
+      "rank": 27,
+      "price": 1299,
+      "level": 47,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r8-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2023-02-08",
+          "text": "2023-02-08"
+        }
+      }
+    },
+    {
+      "id": "om-system:om5ii",
+      "slug": "om-system-om5ii",
+      "name": "OM System OM-5 Mark II",
+      "brand": "OM System",
+      "rank": 28,
+      "price": 1050,
+      "level": 41,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/om-system-om5ii-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.37,
+          "text": "20.37 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xe5",
+      "slug": "fujifilm-xe5",
+      "name": "Fujifilm X-E5",
+      "brand": "Fujifilm",
+      "rank": 29,
+      "price": 1699,
+      "level": 44,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xe5-back.webp",
+        "front": "cameras/fujifilm-xe5-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 40.2,
+          "text": "40.2 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 13,
+          "text": "13 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-06-12",
+          "text": "2025-06-12"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xt50",
+      "slug": "fujifilm-xt50",
+      "name": "Fujifilm X-T50",
+      "brand": "Fujifilm",
+      "rank": 30,
+      "price": 1600,
+      "level": 44,
+      "coverage": 88,
+      "image": {
+        "back": "cameras/fujifilm-xt50-back.webp",
+        "front": "cameras/fujifilm-xt50-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 40.2,
+          "text": "40.2 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 13,
+          "text": "13 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-05-16",
+          "text": "2024-05-16"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xm5",
+      "slug": "fujifilm-xm5",
+      "name": "Fujifilm X-M5",
+      "brand": "Fujifilm",
+      "rank": 31,
+      "price": 899,
+      "level": 30,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xm5-back.webp",
+        "front": "cameras/fujifilm-xm5-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 26.1,
+          "text": "26.1 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2024-10-14",
+          "text": "2024-10-14"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xt5",
+      "slug": "fujifilm-xt5",
+      "name": "Fujifilm X-T5",
+      "brand": "Fujifilm",
+      "rank": 32,
+      "price": 1999,
+      "level": 58,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xt5-back.webp",
+        "front": "cameras/fujifilm-xt5-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 40.2,
+          "text": "40.2 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2022-11-02",
+          "text": "2022-11-02"
+        }
+      }
+    },
+    {
+      "id": "nikon:z5ii",
+      "slug": "nikon-z5ii",
+      "name": "Nikon Z5 II",
+      "brand": "Nikon",
+      "rank": 33,
+      "price": 1597,
+      "level": 63,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z5ii-back.webp",
+        "front": "cameras/nikon-z5ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-04-03",
+          "text": "2025-04-03"
+        }
+      }
+    },
+    {
+      "id": "canon:r50v",
+      "slug": "canon-r50v",
+      "name": "Canon EOS R50 V",
+      "brand": "Canon",
+      "rank": 34,
+      "price": 569,
+      "level": 33,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/canon-r50v-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 22.3,
+            "h": 14.9
+          },
+          "text": "APS-C (22.3 × 14.9 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2025-03-26",
+          "text": "2025-03-26"
+        }
+      }
+    },
+    {
+      "id": "sigma:bf",
+      "slug": "sigma-bf",
+      "name": "Sigma BF",
+      "brand": "Sigma",
+      "rank": 35,
+      "price": 1999,
+      "level": 29,
+      "coverage": 86,
+      "image": {
+        "back": "cameras/sigma-bf-back.webp",
+        "front": "cameras/sigma-bf-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.6,
+          "text": "24.6 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 8,
+          "text": "8 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2025-02-24",
+          "text": "2025-02-24"
+        }
+      }
+    },
+    {
+      "id": "om-system:om3",
+      "slug": "om-system-om3",
+      "name": "OM System OM-3",
+      "brand": "OM System",
+      "rank": 36,
+      "price": 1700,
+      "level": 55,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/om-system-om3-back.webp",
+        "front": "cameras/om-system-om3-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.37,
+          "text": "20.37 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 120,
+          "text": "120 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-02-06",
+          "text": "2025-02-06"
+        }
+      }
+    },
+    {
+      "id": "leica:sl3s",
+      "slug": "leica-sl3s",
+      "name": "Leica SL3-S",
+      "brand": "Leica",
+      "rank": 37,
+      "price": 5665,
+      "level": 66,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/leica-sl3s-back.webp",
+        "front": "cameras/leica-sl3s-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 24.6,
+          "text": "24.6 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2025-01-16",
+          "text": "2025-01-16"
+        }
+      }
+    },
+    {
+      "id": "canon:r50",
+      "slug": "canon-r50",
+      "name": "Canon EOS R50",
+      "brand": "Canon",
+      "rank": 38,
+      "price": 679,
+      "level": 35,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r50-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 22.3,
+            "h": 14.9
+          },
+          "text": "APS-C (22.3 × 14.9 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2023-02-07",
+          "text": "2023-02-07"
+        }
+      }
+    },
+    {
+      "id": "canon:r10",
+      "slug": "canon-r10",
+      "name": "Canon EOS R10",
+      "brand": "Canon",
+      "rank": 39,
+      "price": 1099,
+      "level": 35,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r10-back.webp",
+        "front": "cameras/canon-r10-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 22.3,
+            "h": 14.9
+          },
+          "text": "APS-C (22.3 × 14.9 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2022-05-24",
+          "text": "2022-05-24"
+        }
+      }
+    },
+    {
+      "id": "canon:r7",
+      "slug": "canon-r7",
+      "name": "Canon EOS R7",
+      "brand": "Canon",
+      "rank": 40,
+      "price": 1549,
+      "level": 61,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r7-back.webp",
+        "front": "cameras/canon-r7-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 22.3,
+            "h": 14.8
+          },
+          "text": "APS-C (22.3 × 14.8 mm)"
+        },
+        "mp": {
+          "value": 32.5,
+          "text": "32.5 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2022-05-24",
+          "text": "2022-05-24"
+        }
+      }
+    },
+    {
+      "id": "leica:m11",
+      "slug": "leica-m11",
+      "name": "Leica M11",
+      "brand": "Leica",
+      "rank": 41,
+      "price": 10400,
+      "level": 39,
+      "coverage": 76,
+      "image": {
+        "back": "cameras/leica-m11-back.webp",
+        "front": "cameras/leica-m11-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2022-01-13",
+          "text": "2022-01-13"
+        }
+      }
+    },
+    {
+      "id": "sony:a1ii",
+      "slug": "sony-a1ii",
+      "name": "Sony a1 II",
+      "brand": "Sony",
+      "rank": 42,
+      "price": 6798,
+      "level": 74,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a1ii-back.webp",
+        "front": "cameras/sony-a1ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 24
+          },
+          "text": "Full frame (35.9 × 24 mm)"
+        },
+        "mp": {
+          "value": 50.1,
+          "text": "50.1 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-11-19",
+          "text": "2024-11-19"
+        }
+      }
+    },
+    {
+      "id": "nikon:z50ii",
+      "slug": "nikon-z50ii",
+      "name": "Nikon Z50 II",
+      "brand": "Nikon",
+      "rank": 43,
+      "price": 957,
+      "level": 38,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z50ii-back.webp",
+        "front": "cameras/nikon-z50ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 20.9,
+          "text": "20.9 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2024-11-06",
+          "text": "2024-11-06"
+        }
+      }
+    },
+    {
+      "id": "leica:m11d",
+      "slug": "leica-m11d",
+      "name": "Leica M11-D",
+      "brand": "Leica",
+      "rank": 44,
+      "price": 10950,
+      "level": 38,
+      "coverage": 70,
+      "image": {
+        "back": "cameras/leica-m11d-back.webp",
+        "front": "cameras/leica-m11d-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        }
+      }
+    },
+    {
+      "id": "canon:r1",
+      "slug": "canon-r1",
+      "name": "Canon EOS R1",
+      "brand": "Canon",
+      "rank": 45,
+      "price": 6799,
+      "level": 81,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r1-back.webp",
+        "front": "cameras/canon-r1-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-07-17",
+          "text": "2024-07-17"
+        }
+      }
+    },
+    {
+      "id": "canon:r5ii",
+      "slug": "canon-r5ii",
+      "name": "Canon EOS R5 Mark II",
+      "brand": "Canon",
+      "rank": 46,
+      "price": 3999,
+      "level": 77,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/canon-r5ii-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 45,
+          "text": "45 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-07-17",
+          "text": "2024-07-17"
+        }
+      }
+    },
+    {
+      "id": "pixii:max",
+      "slug": "pixii-max",
+      "name": "Pixii Max",
+      "brand": "Pixii",
+      "rank": 47,
+      "price": 749,
+      "level": null,
+      "coverage": 42,
+      "image": {
+        "back": "cameras/pixii-max-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2024-07",
+          "text": "2024-07"
+        }
+      }
+    },
+    {
+      "id": "sony:zve10ii",
+      "slug": "sony-zve10ii",
+      "name": "Sony ZV-E10 II",
+      "brand": "Sony",
+      "rank": 48,
+      "price": 1198,
+      "level": 34,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-zve10ii-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 26,
+          "text": "26 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2024-07-10",
+          "text": "2024-07-10"
+        }
+      }
+    },
+    {
+      "id": "nikon:z6iii",
+      "slug": "nikon-z6iii",
+      "name": "Nikon Z6 III",
+      "brand": "Nikon",
+      "rank": 49,
+      "price": 1997,
+      "level": 72,
+      "coverage": 94,
+      "image": {
+        "back": "cameras/nikon-z6iii-back.webp",
+        "front": "cameras/nikon-z6iii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-06-17",
+          "text": "2024-06-17"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:gfx100sii",
+      "slug": "fujifilm-gfx100sii",
+      "name": "Fujifilm GFX 100S II",
+      "brand": "Fujifilm",
+      "rank": 50,
+      "price": 5699,
+      "level": 60,
+      "coverage": 94,
+      "image": {
+        "back": "cameras/fujifilm-gfx100sii-back.webp",
+        "front": "cameras/fujifilm-gfx100sii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Medium format",
+            "w": 43.8,
+            "h": 32.9
+          },
+          "text": "Medium format (43.8 × 32.9 mm)"
+        },
+        "mp": {
+          "value": 102,
+          "text": "102 MP"
+        },
+        "mount": {
+          "value": "Fujifilm G",
+          "text": "Fujifilm G"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 7,
+          "text": "7 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-05-16",
+          "text": "2024-05-16"
+        }
+      }
+    },
+    {
+      "id": "leica:sl3",
+      "slug": "leica-sl3",
+      "name": "Leica SL3",
+      "brand": "Leica",
+      "rank": 51,
+      "price": 7485,
+      "level": 71,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/leica-sl3-back.webp",
+        "front": "cameras/leica-sl3-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2024-03-07",
+          "text": "2024-03-07"
+        }
+      }
+    },
+    {
+      "id": "om-system:om1ii",
+      "slug": "om-system-om1ii",
+      "name": "OM System OM-1 Mark II",
+      "brand": "OM System",
+      "rank": 52,
+      "price": 2000,
+      "level": 62,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/om-system-om1ii-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.4,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.4 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.4,
+          "text": "20.4 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 120,
+          "text": "120 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "hasselblad:907xcfv100c",
+      "slug": "hasselblad-907xcfv100c",
+      "name": "Hasselblad 907X & CFV 100C",
+      "brand": "Hasselblad",
+      "rank": 53,
+      "price": 7399,
+      "level": 48,
+      "coverage": 52,
+      "image": {},
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Medium format",
+            "w": 43.8,
+            "h": 32.9
+          },
+          "text": "Medium format (43.8 × 32.9 mm)"
+        },
+        "mp": {
+          "value": 100,
+          "text": "100 MP"
+        },
+        "mount": {
+          "value": "Hasselblad XCD",
+          "text": "Hasselblad XCD"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        }
+      }
+    },
+    {
+      "id": "pixii:a2572",
+      "slug": "pixii-a2572",
+      "name": "Pixii A2572+",
+      "brand": "Pixii",
+      "rank": 54,
+      "price": 749,
+      "level": null,
+      "coverage": 42,
+      "image": {},
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C"
+          },
+          "text": "APS-C"
+        },
+        "mp": {
+          "value": 26,
+          "text": "26 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        }
+      }
+    },
+    {
+      "id": "sony:a9iii",
+      "slug": "sony-a9iii",
+      "name": "Sony a9 III",
+      "brand": "Sony",
+      "rank": 55,
+      "price": 6398,
+      "level": 74,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a9iii-back.webp",
+        "front": "cameras/sony-a9iii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.6,
+          "text": "24.6 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 120,
+          "text": "120 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-11-07",
+          "text": "2023-11-07"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:gfx100ii",
+      "slug": "fujifilm-gfx100ii",
+      "name": "Fujifilm GFX100 II",
+      "brand": "Fujifilm",
+      "rank": 56,
+      "price": 8499,
+      "level": 71,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/fujifilm-gfx100ii-back.webp",
+        "front": "cameras/fujifilm-gfx100ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Medium format",
+            "w": 43.8,
+            "h": 32.9
+          },
+          "text": "Medium format (43.8 × 32.9 mm)"
+        },
+        "mp": {
+          "value": 102,
+          "text": "102 MP"
+        },
+        "mount": {
+          "value": "Fujifilm G",
+          "text": "Fujifilm G"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 8,
+          "text": "8 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-09-12",
+          "text": "2023-09-12"
+        }
+      }
+    },
+    {
+      "id": "sony:a7cii",
+      "slug": "sony-a7cii",
+      "name": "Sony a7C II",
+      "brand": "Sony",
+      "rank": 57,
+      "price": 2098,
+      "level": 48,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7cii-back.webp",
+        "front": "cameras/sony-a7cii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 32.7,
+          "text": "32.7 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-08-29",
+          "text": "2023-08-29"
+        }
+      }
+    },
+    {
+      "id": "sony:a7cr",
+      "slug": "sony-a7cr",
+      "name": "Sony a7CR",
+      "brand": "Sony",
+      "rank": 58,
+      "price": 2998,
+      "level": 50,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7cr-back.webp",
+        "front": "cameras/sony-a7cr-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.7,
+            "h": 23.8
+          },
+          "text": "Full frame (35.7 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 61,
+          "text": "61 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 8,
+          "text": "8 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-08-29",
+          "text": "2023-08-29"
+        }
+      }
+    },
+    {
+      "id": "sony:a6700",
+      "slug": "sony-a6700",
+      "name": "Sony a6700",
+      "brand": "Sony",
+      "rank": 59,
+      "price": 1498,
+      "level": 48,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a6700-back.webp",
+        "front": "cameras/sony-a6700-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.3,
+            "h": 15.5
+          },
+          "text": "APS-C (23.3 × 15.5 mm)"
+        },
+        "mp": {
+          "value": 26,
+          "text": "26 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xs20",
+      "slug": "fujifilm-xs20",
+      "name": "Fujifilm X-S20",
+      "brand": "Fujifilm",
+      "rank": 60,
+      "price": 1499,
+      "level": 49,
+      "coverage": 94,
+      "image": {
+        "back": "cameras/fujifilm-xs20-back.webp",
+        "front": "cameras/fujifilm-xs20-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 26.1,
+          "text": "26.1 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-05-24",
+          "text": "2023-05-24"
+        }
+      }
+    },
+    {
+      "id": "canon:r100",
+      "slug": "canon-r100",
+      "name": "Canon EOS R100",
+      "brand": "Canon",
+      "rank": 61,
+      "price": 429,
+      "level": 22,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r100-back.webp",
+        "front": "cameras/canon-r100-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 22.3,
+            "h": 14.9
+          },
+          "text": "APS-C (22.3 × 14.9 mm)"
+        },
+        "mp": {
+          "value": 24.1,
+          "text": "24.1 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 6.5,
+          "text": "6.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2023-05-24",
+          "text": "2023-05-24"
+        }
+      }
+    },
+    {
+      "id": "nikon:z8",
+      "slug": "nikon-z8",
+      "name": "Nikon Z8",
+      "brand": "Nikon",
+      "rank": 62,
+      "price": 3197,
+      "level": 73,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z8-back.webp",
+        "front": "cameras/nikon-z8-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 45.7,
+          "text": "45.7 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-05-10",
+          "text": "2023-05-10"
+        }
+      }
+    },
+    {
+      "id": "leica:m11monochrom",
+      "slug": "leica-m11monochrom",
+      "name": "Leica M11 Monochrom",
+      "brand": "Leica",
+      "rank": 63,
+      "price": 11050,
+      "level": 42,
+      "coverage": 76,
+      "image": {
+        "back": "cameras/leica-m11monochrom-back.webp",
+        "front": "cameras/leica-m11monochrom-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.8,
+            "h": 23.9
+          },
+          "text": "Full frame (35.8 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 60.3,
+          "text": "60.3 MP"
+        },
+        "mount": {
+          "value": "Leica M",
+          "text": "Leica M"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2023-04-13",
+          "text": "2023-04-13"
+        }
+      }
+    },
+    {
+      "id": "sony:zve1",
+      "slug": "sony-zve1",
+      "name": "Sony ZV-E1",
+      "brand": "Sony",
+      "rank": 64,
+      "price": 2198,
+      "level": 38,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-zve1-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 12.1,
+          "text": "12.1 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2023-03-29",
+          "text": "2023-03-29"
+        }
+      }
+    },
+    {
+      "id": "sony:a7rv",
+      "slug": "sony-a7rv",
+      "name": "Sony a7R V",
+      "brand": "Sony",
+      "rank": 65,
+      "price": 3498,
+      "level": 67,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7rv-back.webp",
+        "front": "cameras/sony-a7rv-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.7,
+            "h": 23.8
+          },
+          "text": "Full frame (35.7 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 61,
+          "text": "61 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2022-10",
+          "text": "2022-10"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xh2",
+      "slug": "fujifilm-xh2",
+      "name": "Fujifilm X-H2",
+      "brand": "Fujifilm",
+      "rank": 66,
+      "price": 2299,
+      "level": 66,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xh2-back.webp",
+        "front": "cameras/fujifilm-xh2-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 40.2,
+          "text": "40.2 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "nikon:z30",
+      "slug": "nikon-z30",
+      "name": "Nikon Z30",
+      "brand": "Nikon",
+      "rank": 67,
+      "price": 557,
+      "level": 26,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z30-back.webp",
+        "front": "cameras/nikon-z30-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 20.9,
+          "text": "20.9 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2022-06-29",
+          "text": "2022-06-29"
+        }
+      }
+    },
+    {
+      "id": "fujifilm:xh2s",
+      "slug": "fujifilm-xh2s",
+      "name": "Fujifilm X-H2S",
+      "brand": "Fujifilm",
+      "rank": 68,
+      "price": 2899,
+      "level": 64,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/fujifilm-xh2s-back.webp",
+        "front": "cameras/fujifilm-xh2s-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 26.16,
+          "text": "26.16 MP"
+        },
+        "mount": {
+          "value": "Fujifilm X",
+          "text": "Fujifilm X"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 40,
+          "text": "40 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2022-05-31",
+          "text": "2022-05-31"
+        }
+      }
+    },
+    {
+      "id": "canon:r5c",
+      "slug": "canon-r5c",
+      "name": "Canon EOS R5 C",
+      "brand": "Canon",
+      "rank": 69,
+      "price": 3199,
+      "level": 56,
+      "coverage": 82,
+      "image": {
+        "front": "cameras/canon-r5c-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 45,
+          "text": "45 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2022-01-19",
+          "text": "2022-01-19"
+        }
+      }
+    },
+    {
+      "id": "nikon:z9",
+      "slug": "nikon-z9",
+      "name": "Nikon Z9",
+      "brand": "Nikon",
+      "rank": 70,
+      "price": 4797,
+      "level": 73,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z9-back.webp",
+        "front": "cameras/nikon-z9-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 45.7,
+          "text": "45.7 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2021-10-28",
+          "text": "2021-10-28"
+        }
+      }
+    },
+    {
+      "id": "sony:a7iv",
+      "slug": "sony-a7iv",
+      "name": "Sony a7 IV",
+      "brand": "Sony",
+      "rank": 71,
+      "price": 1998,
+      "level": 54,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7iv-back.webp",
+        "front": "cameras/sony-a7iv-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 32.7,
+          "text": "32.7 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2021-10-21",
+          "text": "2021-10-21"
+        }
+      }
+    },
+    {
+      "id": "sony:zve10",
+      "slug": "sony-zve10",
+      "name": "Sony ZV-E10",
+      "brand": "Sony",
+      "rank": 72,
+      "price": 748,
+      "level": 22,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-zve10-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2021-07-27",
+          "text": "2021-07-27"
+        }
+      }
+    },
+    {
+      "id": "nikon:zfc",
+      "slug": "nikon-zfc",
+      "name": "Nikon Zfc",
+      "brand": "Nikon",
+      "rank": 73,
+      "price": 757,
+      "level": 28,
+      "coverage": 92,
+      "image": {
+        "back": "cameras/nikon-zfc-back.webp",
+        "front": "cameras/nikon-zfc-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 20.9,
+          "text": "20.9 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2021-06-29",
+          "text": "2021-06-29"
+        }
+      }
+    },
+    {
+      "id": "panasonic:gh5ii",
+      "slug": "panasonic-gh5ii",
+      "name": "Panasonic Lumix GH5 II",
+      "brand": "Panasonic",
+      "rank": 74,
+      "price": 998,
+      "level": 49,
+      "coverage": 82,
+      "image": {
+        "back": "cameras/panasonic-gh5ii-back.webp",
+        "front": "cameras/panasonic-gh5ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.3,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.3 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.33,
+          "text": "20.33 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 12,
+          "text": "12 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "canon:r3",
+      "slug": "canon-r3",
+      "name": "Canon EOS R3",
+      "brand": "Canon",
+      "rank": 75,
+      "price": 4399,
+      "level": 74,
+      "coverage": 94,
+      "image": {
+        "front": "cameras/canon-r3-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 24.1,
+          "text": "24.1 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2021-09-14",
+          "text": "2021-09-14"
+        }
+      }
+    },
+    {
+      "id": "canon:1dxiii",
+      "slug": "canon-1dxiii",
+      "name": "Canon EOS-1D X Mark III",
+      "brand": "Canon",
+      "rank": 76,
+      "price": 4999,
+      "level": 50,
+      "coverage": 76,
+      "image": {
+        "front": "cameras/canon-1dxiii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 20.1,
+          "text": "20.1 MP"
+        },
+        "mount": {
+          "value": "Canon EF",
+          "text": "Canon EF"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2020-01-06",
+          "text": "2020-01-06"
+        }
+      }
+    },
+    {
+      "id": "sigma:fpl",
+      "slug": "sigma-fpl",
+      "name": "Sigma fp L",
+      "brand": "Sigma",
+      "rank": 77,
+      "price": 2499,
+      "level": 31,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sigma-fpl-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 61,
+          "text": "61 MP"
+        },
+        "mount": {
+          "value": "L-Mount",
+          "text": "L-Mount"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        }
+      }
+    },
+    {
+      "id": "sony:a1",
+      "slug": "sony-a1",
+      "name": "Sony a1",
+      "brand": "Sony",
+      "rank": 78,
+      "price": 6198,
+      "level": 73,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a1-back.webp",
+        "front": "cameras/sony-a1-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 24
+          },
+          "text": "Full frame (35.9 × 24 mm)"
+        },
+        "mp": {
+          "value": 50.1,
+          "text": "50.1 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 30,
+          "text": "30 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2021-01-27",
+          "text": "2021-01-27"
+        }
+      }
+    },
+    {
+      "id": "nikon:z6ii",
+      "slug": "nikon-z6ii",
+      "name": "Nikon Z6 II",
+      "brand": "Nikon",
+      "rank": 79,
+      "price": 1447,
+      "level": 49,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z6ii-back.webp",
+        "front": "cameras/nikon-z6ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 14,
+          "text": "14 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-10-14",
+          "text": "2020-10-14"
+        }
+      }
+    },
+    {
+      "id": "nikon:z7ii",
+      "slug": "nikon-z7ii",
+      "name": "Nikon Z7 II",
+      "brand": "Nikon",
+      "rank": 80,
+      "price": 1697,
+      "level": 51,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/nikon-z7ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 45.7,
+          "text": "45.7 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-10-14",
+          "text": "2020-10-14"
+        }
+      }
+    },
+    {
+      "id": "om-system:omdem10iv",
+      "slug": "om-system-omdem10iv",
+      "name": "OM System OM-D E-M10 Mark IV",
+      "brand": "OM System",
+      "rank": 81,
+      "price": 800,
+      "level": 32,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/om-system-omdem10iv-back.webp",
+        "front": "cameras/om-system-omdem10iv-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Micro Four Thirds",
+            "w": 17.4,
+            "h": 13
+          },
+          "text": "Micro Four Thirds (17.4 × 13 mm)"
+        },
+        "mp": {
+          "value": 20.3,
+          "text": "20.3 MP"
+        },
+        "mount": {
+          "value": "Micro Four Thirds",
+          "text": "Micro Four Thirds"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 15,
+          "text": "15 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-08-04",
+          "text": "2020-08-04"
+        }
+      }
+    },
+    {
+      "id": "sony:a7siii",
+      "slug": "sony-a7siii",
+      "name": "Sony a7S III",
+      "brand": "Sony",
+      "rank": 82,
+      "price": 3698,
+      "level": 59,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a7siii-back.webp",
+        "front": "cameras/sony-a7siii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 12.1,
+          "text": "12.1 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-07-28",
+          "text": "2020-07-28"
+        }
+      }
+    },
+    {
+      "id": "nikon:z5",
+      "slug": "nikon-z5",
+      "name": "Nikon Z5",
+      "brand": "Nikon",
+      "rank": 83,
+      "price": 997,
+      "level": 42,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-z5-back.webp",
+        "front": "cameras/nikon-z5-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.3,
+          "text": "24.3 MP"
+        },
+        "mount": {
+          "value": "Nikon Z",
+          "text": "Nikon Z"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 4.5,
+          "text": "4.5 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-07-21",
+          "text": "2020-07-21"
+        }
+      }
+    },
+    {
+      "id": "canon:r5",
+      "slug": "canon-r5",
+      "name": "Canon EOS R5",
+      "brand": "Canon",
+      "rank": 84,
+      "price": 2599,
+      "level": 74,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/canon-r5-back.webp",
+        "front": "cameras/canon-r5-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 44.8,
+          "text": "44.8 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 20,
+          "text": "20 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2020-07-09",
+          "text": "2020-07-09"
+        }
+      }
+    },
+    {
+      "id": "nikon:d780",
+      "slug": "nikon-d780",
+      "name": "Nikon D780",
+      "brand": "Nikon",
+      "rank": 85,
+      "price": 1547,
+      "level": 40,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-d780-back.webp",
+        "front": "cameras/nikon-d780-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 24.5,
+          "text": "24.5 MP"
+        },
+        "mount": {
+          "value": "Nikon F",
+          "text": "Nikon F"
+        },
+        "burst": {
+          "value": 12,
+          "text": "12 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2020-01-06",
+          "text": "2020-01-06"
+        }
+      }
+    },
+    {
+      "id": "nikon:d6",
+      "slug": "nikon-d6",
+      "name": "Nikon D6",
+      "brand": "Nikon",
+      "rank": 86,
+      "price": 6497,
+      "level": 42,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-d6-back.webp",
+        "front": "cameras/nikon-d6-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 20.8,
+          "text": "20.8 MP"
+        },
+        "mount": {
+          "value": "Nikon F",
+          "text": "Nikon F"
+        },
+        "burst": {
+          "value": 14,
+          "text": "14 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2020-02-11",
+          "text": "2020-02-11"
+        }
+      }
+    },
+    {
+      "id": "sony:a6100",
+      "slug": "sony-a6100",
+      "name": "Sony a6100",
+      "brand": "Sony",
+      "rank": 87,
+      "price": 848,
+      "level": 21,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a6100-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        }
+      }
+    },
+    {
+      "id": "canon:rp",
+      "slug": "canon-rp",
+      "name": "Canon EOS RP",
+      "brand": "Canon",
+      "rank": 88,
+      "price": 799,
+      "level": 30,
+      "coverage": 100,
+      "image": {},
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 24
+          },
+          "text": "Full frame (35.9 × 24 mm)"
+        },
+        "mp": {
+          "value": 26.2,
+          "text": "26.2 MP"
+        },
+        "mount": {
+          "value": "Canon RF",
+          "text": "Canon RF"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 5,
+          "text": "5 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2019-02-13",
+          "text": "2019-02-13"
+        }
+      }
+    },
+    {
+      "id": "sony:a6400",
+      "slug": "sony-a6400",
+      "name": "Sony a6400",
+      "brand": "Sony",
+      "rank": 89,
+      "price": 1098,
+      "level": 24,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/sony-a6400-back.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.6
+          },
+          "text": "APS-C (23.5 × 15.6 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 11,
+          "text": "11 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2019-01-15",
+          "text": "2019-01-15"
+        }
+      }
+    },
+    {
+      "id": "sony:a7iii",
+      "slug": "sony-a7iii",
+      "name": "Sony a7 III",
+      "brand": "Sony",
+      "rank": 90,
+      "price": 1398,
+      "level": 44,
+      "coverage": 92,
+      "image": {
+        "back": "cameras/sony-a7iii-back.webp",
+        "front": "cameras/sony-a7iii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.6,
+            "h": 23.8
+          },
+          "text": "Full frame (35.6 × 23.8 mm)"
+        },
+        "mp": {
+          "value": 24.2,
+          "text": "24.2 MP"
+        },
+        "mount": {
+          "value": "Sony E",
+          "text": "Sony E"
+        },
+        "type": {
+          "value": "Mirrorless",
+          "text": "Mirrorless"
+        },
+        "burst": {
+          "value": 10,
+          "text": "10 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        },
+        "announced": {
+          "value": "2018-02-26",
+          "text": "2018-02-26"
+        }
+      }
+    },
+    {
+      "id": "pentax:k1ii",
+      "slug": "pentax-k1ii",
+      "name": "Pentax K-1 Mark II",
+      "brand": "Pentax",
+      "rank": 91,
+      "price": 1797,
+      "level": 38,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/pentax-k1ii-back.webp",
+        "front": "cameras/pentax-k1ii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 24
+          },
+          "text": "Full frame (35.9 × 24 mm)"
+        },
+        "mp": {
+          "value": 36.4,
+          "text": "36.4 MP"
+        },
+        "mount": {
+          "value": "Pentax K",
+          "text": "Pentax K"
+        },
+        "burst": {
+          "value": 4.4,
+          "text": "4.4 fps"
+        },
+        "ibis": {
+          "value": true,
+          "text": "Yes"
+        }
+      }
+    },
+    {
+      "id": "nikon:d850",
+      "slug": "nikon-d850",
+      "name": "Nikon D850",
+      "brand": "Nikon",
+      "rank": 92,
+      "price": 1997,
+      "level": 39,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-d850-back.webp",
+        "front": "cameras/nikon-d850-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 45.7,
+          "text": "45.7 MP"
+        },
+        "mount": {
+          "value": "Nikon F",
+          "text": "Nikon F"
+        },
+        "type": {
+          "value": "DSLR",
+          "text": "DSLR"
+        },
+        "burst": {
+          "value": 7,
+          "text": "7 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2017-08-24",
+          "text": "2017-08-24"
+        }
+      }
+    },
+    {
+      "id": "nikon:d7500",
+      "slug": "nikon-d7500",
+      "name": "Nikon D7500",
+      "brand": "Nikon",
+      "rank": 93,
+      "price": 697,
+      "level": 29,
+      "coverage": 100,
+      "image": {
+        "back": "cameras/nikon-d7500-back.webp",
+        "front": "cameras/nikon-d7500-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "APS-C",
+            "w": 23.5,
+            "h": 15.7
+          },
+          "text": "APS-C (23.5 × 15.7 mm)"
+        },
+        "mp": {
+          "value": 20.9,
+          "text": "20.9 MP"
+        },
+        "mount": {
+          "value": "Nikon F",
+          "text": "Nikon F"
+        },
+        "type": {
+          "value": "DSLR",
+          "text": "DSLR"
+        },
+        "burst": {
+          "value": 8,
+          "text": "8 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2017-04-12",
+          "text": "2017-04-12"
+        }
+      }
+    },
+    {
+      "id": "canon:5div",
+      "slug": "canon-5div",
+      "name": "Canon EOS 5D Mark IV",
+      "brand": "Canon",
+      "rank": 94,
+      "price": 1799,
+      "level": 29,
+      "coverage": 92,
+      "image": {
+        "back": "cameras/canon-5div-back.webp",
+        "front": "cameras/canon-5div-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 36,
+            "h": 24
+          },
+          "text": "Full frame (36 × 24 mm)"
+        },
+        "mp": {
+          "value": 30.4,
+          "text": "30.4 MP"
+        },
+        "mount": {
+          "value": "Canon EF",
+          "text": "Canon EF"
+        },
+        "type": {
+          "value": "DSLR",
+          "text": "DSLR"
+        },
+        "burst": {
+          "value": 7,
+          "text": "7 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2016-08-25",
+          "text": "2016-08-25"
+        }
+      }
+    },
+    {
+      "id": "canon:1dxii",
+      "slug": "canon-1dxii",
+      "name": "Canon EOS-1D X Mark II",
+      "brand": "Canon",
+      "rank": 95,
+      "price": 2999,
+      "level": 35,
+      "coverage": 100,
+      "image": {
+        "front": "cameras/canon-1dxii-front.webp"
+      },
+      "specs": {
+        "sensor": {
+          "value": {
+            "format": "Full frame",
+            "w": 35.9,
+            "h": 23.9
+          },
+          "text": "Full frame (35.9 × 23.9 mm)"
+        },
+        "mp": {
+          "value": 20.2,
+          "text": "20.2 MP"
+        },
+        "mount": {
+          "value": "Canon EF",
+          "text": "Canon EF"
+        },
+        "type": {
+          "value": "DSLR",
+          "text": "DSLR"
+        },
+        "burst": {
+          "value": 16,
+          "text": "16 fps"
+        },
+        "ibis": {
+          "value": false,
+          "text": "No"
+        },
+        "announced": {
+          "value": "2016-02-01",
+          "text": "2016-02-01"
+        }
+      }
+    }
+  ]
+}

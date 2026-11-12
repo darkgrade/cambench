@@ -1,0 +1,18 @@
+{
+  "name": "cambench",
+  "title": "Cambench",
+  "version": "0.22.0",
+  "description": "Every camera's specs, read through Firecrawl from B&H, the makers' own sites and press releases, DPReview, launch news, Wikipedia, MPB and eBay, standardized to one set of ~45 specs and verified across independent sources. Browse, open a camera, compare, plot spec level against price, and follow each fetch as a workflow run. Raw pages stay in Outpost; the results publish to the site.",
+  "author": { "name": "Darkgrade", "url": "https://darkgrade.com" },
+  "keywords": ["cameras", "specs", "database", "benchmark", "app"],
+  "uses": ["firecrawl", "outpost"],
+  "workflows": ["cambench"],
+  "hosts": ["www.dpreview.com", "*.dpreview.com", "*.canon.com", "*.canon-europe.com", "global.canon", "*.nikon.com", "*.nikonusa.com", "*.sony.com", "*.panasonic.com", "leica-camera.com", "*.leica-camera.com", "*.sigma-global.com", "*.sigmaamerica.com", "*.fujifilm-x.com", "*.fujifilm.com", "*.hasselblad.com"],
+  "mcpServers": {
+    "cambench": {
+      "command": "node",
+      "args": ["--no-warnings", "${CLAUDE_PLUGIN_ROOT}/outpost/server.ts"],
+      "env": { "CAMERA_ATLAS_DB": "${CLAUDE_PLUGIN_DATA}/camera-atlas.db" }
+    }
+  }
+}
