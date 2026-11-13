@@ -200,6 +200,14 @@ export function routes(): Route[] {
             card: { heading: camera.name, sub: [camera.brand, camera.level == null ? null : `spec level ${camera.level}/100`, camera.price == null ? null : price(camera.price)].filter(Boolean).join(' · '), image: camera.image.front },
         })
     )
-    const tabs = TABS.slice(1).map((tab): Route => ({ ...overview, path: `${tab.id}/`, title: `${TAB_PAGES[tab.id].title} | ${BENCH.name} by Darkgrade`, description: TAB_PAGES[tab.id].description }))
+    // Each view gets its own card: spreading the overview gave every one of them the bench's name and
+    // count, so /size and /specs shared a card that said nothing about either.
+    const tabs = TABS.slice(1).map((tab): Route => ({
+        ...overview,
+        path: `${tab.id}/`,
+        title: `${TAB_PAGES[tab.id].title} | ${BENCH.name} by Darkgrade`,
+        description: TAB_PAGES[tab.id].description,
+        card: { heading: TAB_PAGES[tab.id].title, sub: TAB_PAGES[tab.id].description },
+    }))
     return [overview, ...tabs, ...cameras]
 }
