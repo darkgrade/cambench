@@ -197,7 +197,7 @@ export function routes(): Route[] {
             path: `${camera.slug}/`,
             title: `${camera.name} specs | ${BENCH.name} by Darkgrade`,
             description: `${camera.name}: spec level ${camera.level ?? '–'}/100 at ${price(camera.price)}, with every spec verified across independent sources.`,
-            card: { heading: camera.name, sub: `${camera.brand} · spec level ${camera.level ?? '–'}/100 · ${price(camera.price)}`, image: camera.image.front },
+            card: { heading: camera.name, sub: [camera.brand, camera.level == null ? null : `spec level ${camera.level}/100`, camera.price == null ? null : price(camera.price)].filter(Boolean).join(' · '), image: camera.image.front },
         })
     )
     const tabs = TABS.slice(1).map((tab): Route => ({ ...overview, path: `${tab.id}/`, title: `${TAB_PAGES[tab.id].title} | ${BENCH.name} by Darkgrade`, description: TAB_PAGES[tab.id].description }))
