@@ -4,10 +4,11 @@
  * Darkgrade card. Runs after `vite build` and the server build; static output only.
  */
 import { Resvg } from '@resvg/resvg-js'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
 import satori from 'satori'
+import sharp from 'sharp'
 import { createElement } from 'react'
 import { OgCard, backdropDataURI, darkgradeMark } from '@kevinschaich/components/og'
 
@@ -15,7 +16,7 @@ interface Route {
     path: string
     title: string
     description: string
-    card: { heading: string; sub: string }
+    card: { heading: string; sub: string; image?: string }
 }
 
 const root = resolve(import.meta.dirname, '..')
@@ -42,14 +43,29 @@ const embedded = (data: unknown): string => (data ? `<script id="camera-data" ty
 
 const escape = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-/** The preview card: the shared Darkgrade card, on Darkgrade's dust backdrop. */
+/**
+ * The card's background: Darkgrade's dust, and for a camera its own picture (a transparent cutout from
+ * public/cameras) on the right, clear of the words. satori and resvg can't read webp, so sharp composes a PNG.
+ */
+async function background(route: Route): Promise<string> {
+    const backdrop = await backdropDataURI()
+    const file = route.card.image && join(root, 'public', route.card.image)
+    if (!file || !existsSync(file)) return backdrop
+    const camera = await sharp(file).resize(520, 440, { fit: 'inside' }).png().toBuffer()
+    const { width = 0, height = 0 } = await sharp(camera).metadata()
+    const base = Buffer.from(backdrop.slice(backdrop.indexOf(',') + 1), 'base64')
+    const png = await sharp(base).resize(1200, 630, { fit: 'cover' }).composite([{ input: camera, left: 930 - Math.round(width / 2), top: 315 - Math.round(height / 2) }]).png().toBuffer()
+    return `data:image/png;base64,${png.toString('base64')}`
+}
+
+/** The preview card: the shared Darkgrade card. */
 async function card(route: Route): Promise<Buffer> {
     const element = createElement(OgCard, {
         logo: { mark: darkgradeMark.dark, name: 'Darkgrade' },
         main: route.card.heading,
         sub: route.card.sub,
         address: `darkgrade.com${server.BENCH.path.replace(/\/$/, '')}${route.path ? `/${route.path.replace(/\/$/, '')}` : ''}`,
-        background: await backdropDataURI(),
+        background: await background(route),
     })
     const svg = await satori(element, { width: 1200, height: 630, fonts: FONTS })
     return Buffer.from(new Resvg(svg).render().asPng())
