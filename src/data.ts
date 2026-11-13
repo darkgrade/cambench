@@ -167,7 +167,7 @@ export function routes(): Route[] {
         path: '',
         title: `${BENCH.name} | Darkgrade`,
         description: BENCH.tagline,
-        card: { eyebrow: 'Cambench by Darkgrade', heading: BENCH.tagline, stats: [{ label: 'Cameras', value: String(CAMERAS.length) }, ...(best ? [{ label: 'Highest spec level', value: best.name }] : [])] },
+        card: { eyebrow: 'Cambench', heading: BENCH.tagline, stats: [{ label: 'Cameras', value: String(CAMERAS.length) }, ...(best ? [{ label: 'Highest spec level', value: best.name }] : [])] },
     }
     const cameras = CAMERAS.map(
         (camera): Route => ({

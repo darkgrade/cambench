@@ -1,4 +1,3 @@
-import { Byline } from '@kevinschaich/components'
 import { BENCH, CAMERAS, type CameraDetail, TABS, embeddedDetail } from '@site/data'
 import { CameraPage } from '@site/pages/camera'
 import { Overview, tabFromPath } from '@site/pages/overview'
@@ -17,7 +16,13 @@ export function App({ path, detail }: { path: string; detail?: CameraDetail }) {
                     </a>
                     <p className="text-sm text-muted-foreground">{BENCH.tagline}</p>
                 </div>
-                <Byline repo={BENCH.repository} />
+                <span className="ks-byline">
+                    <a href="https://darkgrade.com/">By Darkgrade</a>
+                    {' · '}
+                    <a href={`https://github.com/${BENCH.repository}`} target="_blank" rel="noopener">
+                        code on github
+                    </a>
+                </span>
             </header>
             {camera ? <CameraPage camera={camera} detail={detail ?? embeddedDetail()} /> : <Overview initialTab={tab ?? TABS[0].id} />}
         </div>
