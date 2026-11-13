@@ -1,4 +1,8 @@
+[![Cambench by Darkgrade](https://darkgrade.com/cambench/og/index.png)](https://darkgrade.com/cambench/)
+
 # Cambench
+
+**[See the results →](https://darkgrade.com/cambench/)**
 
 Every camera body's specs, read from the makers' own sites, B&H, DPReview, launch news, Wikipedia and more,
 standardized to one set of about 45 specs and verified across independent sources. Each camera gets a spec
