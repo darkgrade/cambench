@@ -2,3 +2,9 @@ node_modules/
 dist/
 .server/
 .DS_Store
+
+# The overview's data and small pictures, built from results/ by scripts/build-data.ts.
+public/data/
+src/facts.json
+src/agreement.json
+src/bodies.json

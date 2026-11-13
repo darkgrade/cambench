@@ -1,7 +1,8 @@
 /**
- * The published results, bundled at build time: results/cambench.json (every camera's headline numbers,
- * for the list and the chart) and results/cameras/<slug>.json (one camera's every spec, for its page). The
- * Outpost app publishes both; the evidence behind them (saved pages, quotes) stays in Outpost.
+ * The published results' summary, bundled at build time: results/cambench.json (every camera's headline
+ * numbers, the spec dictionary and the sources). One camera's every spec is in results/cameras/<slug>.json
+ * (its own page: src/details.ts); the overview's views load what scripts/build-data.ts makes of those
+ * (src/readings.ts). The Outpost app publishes the results; the saved pages stay in Outpost.
  */
 import results from '@results/cambench.json'
 
@@ -16,12 +17,27 @@ export const BENCH = {
     subject: 'Camera spec database, verified across sources',
 }
 
-/** The overview's tabs; each after the first is its own page at BENCH.path + id. */
+/** The overview's views; each after the first is its own page at BENCH.path + id. */
 export const TABS = [
+    { id: 'story', label: 'Story' },
+    // The Atlas keeps the address the spec level chart had.
+    { id: 'spec-level', label: 'Atlas' },
+    { id: 'size', label: 'Size' },
+    { id: 'sources', label: 'Sources' },
+    { id: 'compare', label: 'Compare' },
     { id: 'cameras', label: 'Cameras' },
-    { id: 'spec-level', label: 'Spec level' },
-    { id: 'method', label: 'How we verify' },
+    { id: 'method', label: 'Method' },
 ]
+
+/** What each view is, for its page title and description. */
+const TAB_PAGES: Record<string, { title: string; description: string }> = {
+    'spec-level': { title: 'Camera atlas: spec level, price, resolution and more', description: 'Every camera placed by price, spec level, resolution, burst, weight, release date or sensor size. Pick the axes and find the one that fits.' },
+    size: { title: 'Camera size comparison', description: 'Every camera body side by side at true relative size, from its verified dimensions, with the sensors drawn to scale.' },
+    sources: { title: 'Which camera spec sources agree', description: 'How often the makers, B&H, DPReview, Wikipedia and the big retailers state the same camera specs, and exactly where they differ.' },
+    compare: { title: 'Compare two cameras', description: 'Two cameras side by side: their spec levels area by area, and every spec with how well it is verified.' },
+    cameras: { title: 'Every camera', description: 'Every camera with its spec level, price, sensor, resolution and burst, newest first, as a grid and a sortable table.' },
+    method: { title: 'How we verify', description: 'Where the specs come from, how each page is read, what makes a value verified, and how the spec level is scored.' },
+}
 
 export interface Reason {
     area: string
@@ -112,6 +128,12 @@ export interface Results {
 export const RUN = results as Results
 export const CAMERAS = [...RUN.cameras].sort((first, second) => (second.level ?? -1) - (first.level ?? -1))
 
+/** The camera a path names, if it is a camera's own page. */
+export function cameraFromPath(path: string): CameraSummary | undefined {
+    const slug = path.replace(BENCH.path, '').replace(/\/$/, '')
+    return slug ? CAMERAS.find(candidate => candidate.slug === slug) : undefined
+}
+
 /**
  * One camera's page data: the server render reads every camera's file (src/details.ts); a browser reads only
  * its own page's, which the build embeds in that page (id "camera-data"), so no page carries every camera.
@@ -187,6 +209,6 @@ export function routes(): Route[] {
             },
         })
     )
-    const tabs = TABS.slice(1).map((tab): Route => ({ ...overview, path: `${tab.id}/`, title: `${tab.label} | ${BENCH.name} by Darkgrade` }))
+    const tabs = TABS.slice(1).map((tab): Route => ({ ...overview, path: `${tab.id}/`, title: `${TAB_PAGES[tab.id].title} | ${BENCH.name} by Darkgrade`, description: TAB_PAGES[tab.id].description }))
     return [overview, ...tabs, ...cameras]
 }

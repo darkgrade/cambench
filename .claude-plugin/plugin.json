@@ -1,8 +1,8 @@
 {
   "name": "cambench",
   "title": "Cambench",
-  "version": "0.22.0",
-  "description": "Every camera's specs, read through Firecrawl from B&H, the makers' own sites and press releases, DPReview, launch news, Wikipedia, MPB and eBay, standardized to one set of ~45 specs and verified across independent sources. Browse, open a camera, compare, plot spec level against price, and follow each fetch as a workflow run. Raw pages stay in Outpost; the results publish to the site.",
+  "version": "0.23.0",
+  "description": "Every camera's specs, read through Firecrawl from B&H, the makers' own sites and press releases, DPReview, launch news, Wikipedia, MPB and eBay, standardized to one set of ~45 specs and verified across independent sources. Start a fetch, choose which cameras it covers and follow it as a workflow run. Raw pages stay in Outpost; the results publish to the site, which is where they are shown.",
   "author": { "name": "Darkgrade", "url": "https://darkgrade.com" },
   "keywords": ["cameras", "specs", "database", "benchmark", "app"],
   "uses": ["firecrawl", "outpost"],

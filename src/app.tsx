@@ -1,30 +1,48 @@
-import { BENCH, CAMERAS, type CameraDetail, TABS, embeddedDetail } from '@site/data'
-import { CameraPage } from '@site/pages/camera'
-import { Overview, tabFromPath } from '@site/pages/overview'
+import { BENCH, TABS } from '@site/data'
+import { Loading, Page, Shell, tabFromPath, useTab } from '@site/kit/shell'
+import { CamerasView } from '@site/views/cameras'
+import { MethodView } from '@site/views/method'
+import { StoryView } from '@site/views/story'
+import { type ComponentType, lazy, Suspense } from 'react'
 
-/** The page for a path under BENCH.path: an overview tab, or one camera's page. */
-export function App({ path, detail }: { path: string; detail?: CameraDetail }) {
-    const id = path.replace(BENCH.path, '').replace(/\/$/, '')
-    const tab = tabFromPath(path)
-    const camera = tab ? undefined : id ? CAMERAS.find(candidate => candidate.slug === id) : undefined
+/** A view's props: how it opens another view, optionally at a query (two cameras to compare). */
+export interface ViewProps {
+    onOpen: (tab: string, query?: string) => void
+}
+
+/** The views that load on first use, so the story never waits on their code. */
+const LOADERS = {
+    atlas: () => import('@site/views/atlas'),
+    size: () => import('@site/views/size'),
+    sources: () => import('@site/views/sources'),
+    compare: () => import('@site/views/compare'),
+}
+const AtlasView = lazy<ComponentType<ViewProps>>(LOADERS.atlas)
+const SizeView = lazy<ComponentType<ViewProps>>(LOADERS.size)
+const SourcesView = lazy<ComponentType<ViewProps>>(LOADERS.sources)
+const CompareView = lazy<ComponentType<ViewProps>>(LOADERS.compare)
+
+/** Loads every view's code: the server render waits on this so each view's page is prerendered whole. */
+export const loadViews = (): Promise<unknown> => Promise.all(Object.values(LOADERS).map(load => load()))
+
+/** The overview: the story and the other views, each at its own path under BENCH.path. */
+export function Overview({ path }: { path: string }) {
+    const [tab, select] = useTab(BENCH, TABS, tabFromPath(BENCH, TABS, path) ?? TABS[0].id)
     return (
-        <div className="mx-auto flex min-h-svh max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6 sm:py-10">
-            <header className="flex flex-wrap items-end justify-between gap-3">
-                <div className="min-w-0">
-                    <h1><a href={BENCH.path} className="font-heading text-2xl font-semibold tracking-tight hover:underline">
-                        {BENCH.name}
-                    </a></h1>
-                    <p className="text-sm text-muted-foreground">{BENCH.tagline}</p>
-                </div>
-                <span className="ks-byline">
-                    <a href="https://darkgrade.com/">By Darkgrade</a>
-                    {' · '}
-                    <a href={`https://github.com/${BENCH.repository}`} target="_blank" rel="noopener">
-                        code on github
-                    </a>
-                </span>
-            </header>
-            {camera ? <CameraPage camera={camera} detail={detail ?? embeddedDetail()} /> : <Overview initialTab={tab ?? TABS[0].id} />}
-        </div>
+        <Shell bench={BENCH} tabs={TABS} tab={tab} onTab={select}>
+            {tab === 'story' && <StoryView onOpen={select} />}
+            {tab === 'cameras' && (
+                <Page>
+                    <CamerasView />
+                </Page>
+            )}
+            {tab === 'method' && <MethodView />}
+            <Suspense fallback={<Loading />}>
+                {tab === 'spec-level' && <AtlasView onOpen={select} />}
+                {tab === 'size' && <SizeView onOpen={select} />}
+                {tab === 'sources' && <SourcesView onOpen={select} />}
+                {tab === 'compare' && <CompareView onOpen={select} />}
+            </Suspense>
+        </Shell>
     )
 }

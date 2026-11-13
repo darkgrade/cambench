@@ -1,5 +1,5 @@
 {
   "name": "cambench",
   "owner": { "name": "Darkgrade" },
-  "plugins": [{ "name": "cambench", "source": "./", "description": "Cambench in Outpost: every camera's verified specs, and the fetch as a workflow run." }]
+  "plugins": [{ "name": "cambench", "source": "./", "description": "Cambench in Outpost: the fetch that reads and verifies every camera's specs, as a workflow run." }]
 }

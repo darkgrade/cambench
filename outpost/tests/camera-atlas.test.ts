@@ -226,7 +226,6 @@ test('a run discovers, scrapes, verifies; a sign-out stops it and Resume finishe
     const cells = v.progress.coverage.find((c: any) => c.id === 'sony:a7v').cells;
     assert.equal(cells.front.state, 'saved');
     assert.equal(cells.back.state, 'failed', 'a missing back is a failure, not optional');
-    assert.match((await tool('pictures', { id: 'sony:a7v' }))['sony:a7v'].front, /^data:image\/png;base64,/);
     assert.ok(existsSync(join(dir, 'images', 'sony-a7v-front.png')), 'kept under a permanent name');
     // Kept for good: even a fetch from the start uses it as it is, never searching or downloading it again.
     const got = served.length, asked = searches.length;

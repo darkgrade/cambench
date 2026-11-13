@@ -120,9 +120,9 @@ for (const route of server.routes()) {
         `<meta name="twitter:card" content="summary_large_image" />`,
         `<script type="application/ld+json">${structuredData(route, url).replace(/</g, '\\u003c')}</script>`,
     ].join('\n        ')
-    const html = template
-        .replace(/<title>[\s\S]*?<meta name="twitter:card"[^>]*>/, head)
-        .replace('<div id="root"></div>', `<div id="root">${server.render(`${server.BENCH.path}${route.path}`)}</div>${embedded(server.pageData(`${server.BENCH.path}${route.path}`))}`)
+    // Replacements are functions so that a "$&" in a page's own text (a quoted price) is not read as a pattern.
+    const body = `<div id="root">${server.render(`${server.BENCH.path}${route.path}`)}</div>${embedded(server.pageData(`${server.BENCH.path}${route.path}`))}`
+    const html = template.replace(/<title>[\s\S]*?<meta name="twitter:card"[^>]*>/, () => head).replace('<div id="root"></div>', () => body)
     const file = join(output, route.path, 'index.html')
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, html)

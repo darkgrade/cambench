@@ -1,227 +1,239 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Stat, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@kevinschaich/components'
+/**
+ * One camera's own page: its pictures and spec level, what makes up the level against the middle of
+ * the field, every spec with who states it, its true size, where it sits among the others, and the
+ * cameras nearest it. Everything is in the prerendered page; nothing here waits on a request.
+ */
+import { Stat, Tabs, TabsList, TabsTrigger } from '@kevinschaich/components'
+import { BENCH, CAMERAS, type CameraDetail, type CameraSummary, type Reason, picture, price, year } from '@site/data'
+import facts from '@site/facts.json'
+import { INK, TYPE } from '@site/kit/theme'
+import { BodySize } from '@site/pages/camera/body'
+import { Specs } from '@site/pages/camera/specs'
 import { LevelChart } from '@site/pages/level-chart'
-import { BENCH, CAMERAS, type CameraDetail, type CameraSummary, type Evidence, type Fact, RUN, picture, price } from '@site/data'
+import { smallPicture } from '@site/readings'
+import { useState } from 'react'
 
-const NEED = RUN.need ?? 3
-const SOURCE_TITLES = Object.fromEntries(RUN.sources.map(source => [source.key, source.title]))
-const sourceTitle = (key: string): string => SOURCE_TITLES[key] ?? key.replace(/^(news|site):/, '')
-const day = (at: string | undefined): string => (at ? new Date(at).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '–')
+const day = (at: string | undefined): string => (at ? new Date(at).toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' }) : '–')
+const MEDIANS = new Map(facts.areas.map(area => [area.area, area.median]))
+const RING = 2 * Math.PI * 52
 
-// A value's status, as consensus set it: verified when enough independent sources agree (a few disagreeing
-// doesn't change that), likely for two, one source, disputed when fewer agree and some disagree, or a dated
-// market price.
-const STATUS: Record<string, { meaning: string; dot: string }> = {
-    verified: { meaning: 'independent sources agree', dot: 'bg-green-500' },
-    quote: { meaning: 'a market price, dated, from these sellers', dot: 'bg-green-500' },
-    likely: { meaning: 'two sources agree', dot: 'bg-amber-500' },
-    single: { meaning: 'one source', dot: 'bg-muted-foreground' },
-    disputed: { meaning: 'sources disagree', dot: 'bg-red-500' },
-}
-
-/** Who states a value, as a pill: its most reliable source and how many others agree, the dot its status. */
-function SourcePill({ fact }: { fact: Fact }) {
-    if (!fact.owners.length) return <span className="text-muted-foreground">–</span>
-    const status = STATUS[fact.status] ?? STATUS.single
-    const others = fact.owners.length - 1
-    const tip = `${status.meaning}: ${fact.owners.join(', ')}${fact.conflicts.length ? ` · ${fact.conflicts.length} disagree` : ''}`
+/** The camera's pictures on a soft light, front first; the back is a tab away. */
+function Pictures({ camera }: { camera: CameraSummary }) {
+    const sides = (['front', 'back'] as const).filter(side => camera.image[side])
+    const [side, setSide] = useState<'front' | 'back'>(sides[0] ?? 'front')
+    if (!sides.length)
+        return (
+            <div className="flex aspect-[4/3] items-center justify-center rounded-3xl border border-dashed border-white/15 text-sm text-muted-foreground">No picture yet</div>
+        )
     return (
-        <span
-            title={tip}
-            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border bg-muted/60 py-0.5 pr-2.5 pl-2 text-xs ${fact.status === 'disputed' ? 'border-red-500/45' : 'border-border'}`}
-        >
-            <i className={`size-[7px] shrink-0 rounded-full ${status.dot}`} aria-hidden />
-            <b className="font-medium">{fact.owners[0]}</b>
-            {others > 0 && <small className="text-[11px] text-muted-foreground">+{others}</small>}
-        </span>
-    )
-}
-
-function EvidenceLine({ evidence, disagrees }: { evidence: Evidence; disagrees?: boolean }) {
-    return (
-        <div className="flex flex-col gap-1 border-l-2 border-border pl-3">
-            <span className="text-xs text-muted-foreground">
-                {disagrees && <span className="font-medium text-red-500">Disagrees: </span>}
-                <span className="font-medium text-foreground">{sourceTitle(evidence.source)}</span> · {evidence.label} ·{' '}
-                <a href={evidence.url} target="_blank" rel="noopener" className="underline">
-                    page
-                </a>{' '}
-                · scraped {day(evidence.at)}
-            </span>
-            {evidence.raw && <code className="whitespace-pre-wrap break-words rounded bg-muted px-2 py-1 text-xs">{evidence.raw}</code>}
+        <div className="flex flex-col items-center gap-3">
+            <figure className="relative flex aspect-[4/3] w-full items-center justify-center" style={{ background: 'radial-gradient(closest-side, oklch(1 0 0 / 0.09), transparent)' }}>
+                {sides.map(item => (
+                    <img
+                        key={item}
+                        src={picture(camera.image[item])}
+                        alt={`${camera.name}, ${item}`}
+                        loading={item === sides[0] ? 'eager' : 'lazy'}
+                        className={`absolute inset-0 size-full object-contain p-4 drop-shadow-[0_24px_40px_rgb(0_0_0/0.7)] transition-opacity duration-300 sm:p-8 ${item === side ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                    />
+                ))}
+            </figure>
+            {sides.length > 1 && (
+                <Tabs value={side} onValueChange={value => setSide(value === 'back' ? 'back' : 'front')}>
+                    <TabsList aria-label="Side">
+                        <TabsTrigger value="front">Front</TabsTrigger>
+                        <TabsTrigger value="back">Back</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+            )}
         </div>
     )
 }
 
-/** A spec's value, which opens to every source's evidence. */
-function SpecRow({ label, tip, fact }: { label: string; tip: string; fact: Fact | undefined }) {
-    const value = !fact ? (
-        <span className="text-muted-foreground">Not stated by any source</span>
-    ) : fact.items?.length ? (
-        <span className="flex flex-wrap gap-1.5">
-            {fact.items.map(item => (
-                <span key={item.text} className="rounded bg-muted px-1.5 py-0.5 text-xs" title={item.owners.join(', ')}>
-                    {item.text} <span className="text-muted-foreground">{item.owners.length}</span>
-                </span>
-            ))}
-        </span>
-    ) : (
-        fact.text ?? '–'
-    )
-    const evidence = fact ? [...fact.evidence.map(item => ({ item, disagrees: false })), ...fact.conflicts.map(item => ({ item, disagrees: true }))] : []
+/** The spec level as a ring that fills toward 100. */
+function LevelRing({ level, rank }: { level: number | null; rank: number }) {
     return (
-        <TableRow className="align-top">
-            <TableCell className="w-1/4 text-muted-foreground" title={tip}>
-                {label}
-            </TableCell>
-            <TableCell>
-                {evidence.length ? (
-                    <details className="group">
-                        <summary className="cursor-pointer list-none">{value}</summary>
-                        <div className="mt-3 flex flex-col gap-2">
-                            {evidence.map(({ item, disagrees }, index) => (
-                                <EvidenceLine key={index} evidence={item} disagrees={disagrees} />
-                            ))}
-                        </div>
-                    </details>
-                ) : (
-                    value
-                )}
-            </TableCell>
-            <TableCell className="w-1/4 text-right">{fact ? <SourcePill fact={fact} /> : null}</TableCell>
-        </TableRow>
+        <div className="relative size-36 shrink-0">
+            <svg viewBox="0 0 120 120" className="size-full -rotate-90" aria-hidden>
+                <circle cx={60} cy={60} r={52} fill="none" stroke="oklch(1 0 0 / 0.08)" strokeWidth={7} />
+                <circle cx={60} cy={60} r={52} fill="none" stroke={INK.accent} strokeWidth={7} strokeLinecap="round" strokeDasharray={`${((level ?? 0) / 100) * RING} ${RING}`} />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className={`${TYPE.number} font-heading text-5xl leading-none font-semibold`}>{level ?? '–'}</span>
+                <span className={`${TYPE.label} mt-1.5`}>Spec level</span>
+                <span className="text-[11px] text-muted-foreground">
+                    #{rank} of {CAMERAS.length}
+                </span>
+            </div>
+        </div>
     )
 }
 
-/** One camera: its pictures, spec level and why, every spec with its sources and their evidence, and every page read. */
-export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: CameraDetail | undefined }) {
-    const rank = CAMERAS.indexOf(camera) + 1
-    const groups = [...new Set(RUN.specs.map(spec => spec.group))]
-    const facts = detail?.facts ?? {}
-    const money = (id: string) => price(typeof facts[id]?.value === 'number' ? (facts[id].value as number) : null)
+/** What makes up the level: each area's score as a bar, with a tick where the middle camera sits. */
+function LevelAreas({ reasons, missing }: { reasons: Reason[]; missing: string[] }) {
     return (
-        <article className="flex flex-col gap-8">
-            <div className="flex flex-col gap-2">
-                <a href={BENCH.path} className="text-sm text-muted-foreground hover:underline">
-                    ← All cameras
-                </a>
-                <h1 className="font-heading text-3xl font-semibold tracking-tight">{camera.name}</h1>
-                <span className="text-sm text-muted-foreground">
-                    {[camera.brand, facts.type?.text, facts.mount?.text, facts.announced?.text && `released ${facts.announced.text}`].filter(Boolean).join(' · ')}
-                </span>
-            </div>
-
-            {(camera.image.front || camera.image.back) && (
-                <div className="grid gap-3 sm:grid-cols-2">
-                    {(['front', 'back'] as const)
-                        .filter(side => camera.image[side])
-                        .map(side => (
-                            <figure key={side} className="relative flex aspect-[4/3] items-center justify-center rounded-xl bg-muted p-6">
-                                <img src={picture(camera.image[side])} alt={`${camera.name}, ${side}`} className="max-h-full max-w-full object-contain" />
-                                <figcaption className="absolute bottom-2 left-3 text-xs text-muted-foreground capitalize">{side}</figcaption>
-                            </figure>
-                        ))}
+        <div className="flex flex-col">
+            {[...reasons]
+                .sort((first, second) => second.weight - first.weight)
+                .map(reason => {
+                    const median = MEDIANS.get(reason.area)
+                    return (
+                        <div key={reason.area} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-t border-white/5 py-2.5 sm:grid-cols-[10rem_minmax(0,1fr)_minmax(0,1.1fr)_5.5rem]">
+                            <span className="col-start-1 row-start-1 text-sm font-medium">{reason.area}</span>
+                            <span className="col-span-2 col-start-1 row-start-2 text-sm text-muted-foreground sm:col-span-1 sm:col-start-2 sm:row-start-1">{reason.why}</span>
+                            <span className="relative col-span-2 col-start-1 row-start-3 h-2 rounded-full bg-white/[0.07] sm:col-span-1 sm:col-start-3 sm:row-start-1">
+                                <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${reason.score}%`, background: median !== undefined && reason.score >= median ? INK.accent : INK.muted }} />
+                                {median !== undefined && <span className="absolute -inset-y-1 w-0.5 rounded-full bg-white" style={{ left: `${median}%` }} title="The middle camera" />}
+                            </span>
+                            <span className={`${TYPE.number} col-start-2 row-start-1 text-right text-xs text-muted-foreground sm:col-start-4`}>
+                                {reason.points} of {reason.weight}
+                            </span>
+                        </div>
+                    )
+                })}
+            {missing.map(area => (
+                <div key={area} className="grid grid-cols-[10rem_1fr] gap-x-4 border-t border-white/5 py-2.5 text-sm">
+                    <span className="font-medium">{area}</span>
+                    <span className="text-muted-foreground">Not known, so left out; the rest count for more</span>
                 </div>
-            )}
+            ))}
+        </div>
+    )
+}
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                <Stat boxed size="lg" label="Spec level" value={camera.level ?? '–'} unit="/ 100" sub={`#${rank} of ${CAMERAS.length}`} />
-                <Stat boxed size="lg" label="MSRP" value={money('msrp')} />
-                <Stat boxed size="lg" label="New" value={money('price_new')} />
-                <Stat boxed size="lg" label="Used" value={money('price_used')} />
-                <Stat boxed size="lg" label="Sensor" value={facts.mp?.text ?? '–'} sub={(facts.sensor?.text ?? '').split(' (')[0]} />
-            </div>
+/** The cameras nearest this one in price and spec level. */
+function rivals(camera: CameraSummary): CameraSummary[] {
+    if (camera.price === null || camera.level === null) return []
+    const distance = (other: CameraSummary): number => Math.hypot(Math.log(other.price! / camera.price!) / Math.log(1.4), (other.level! - camera.level!) / 8)
+    return CAMERAS.filter(other => other.slug !== camera.slug && other.price !== null && other.level !== null)
+        .sort((first, second) => distance(first) - distance(second))
+        .slice(0, 4)
+}
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Spec level</CardTitle>
-                    <CardDescription>Where it sits among the others for its price, and what makes up its level.</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-6">
-                    <LevelChart focus={camera.id} />
-                    {detail?.level?.reasons?.length ? (
-                        <Table>
-                            <TableBody>
-                                {[...detail.level.reasons]
-                                    .sort((first, second) => second.weight - first.weight)
-                                    .map(reason => (
-                                        <TableRow key={reason.area}>
-                                            <TableCell className="w-40 text-muted-foreground">{reason.area}</TableCell>
-                                            <TableCell>{reason.why}</TableCell>
-                                            <TableCell className="w-48">
-                                                <span className="block h-1.5 overflow-hidden rounded-full bg-border">
-                                                    <span className="block h-full rounded-full bg-foreground" style={{ width: `${reason.score}%` }} />
-                                                </span>
-                                            </TableCell>
-                                            <TableCell className="w-28 text-right tabular-nums text-muted-foreground">
-                                                {reason.points} of {reason.weight}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                            </TableBody>
-                        </Table>
-                    ) : null}
-                </CardContent>
-            </Card>
+function Rival({ camera, rival }: { camera: CameraSummary; rival: CameraSummary }) {
+    const thumbnail = smallPicture(rival, true)
+    return (
+        <li className="flex flex-col gap-3 rounded-xl bg-white/[0.04] p-4">
+            <a href={`${BENCH.path}${rival.slug}/`} className="group flex flex-col gap-3">
+                <span className="flex aspect-[4/3] items-center justify-center">
+                    {thumbnail ? <img src={thumbnail} alt="" loading="lazy" className="max-h-full max-w-full object-contain transition-transform group-hover:scale-105" /> : <span className="text-xs text-muted-foreground">No picture yet</span>}
+                </span>
+                <span>
+                    <span className="block text-sm font-medium group-hover:underline">{rival.name}</span>
+                    <span className="block text-xs text-muted-foreground">
+                        {price(rival.price)} · spec level {rival.level}
+                    </span>
+                </span>
+            </a>
+            <a href={`${BENCH.path}compare/?a=${camera.slug}&b=${rival.slug}`} className="text-xs text-muted-foreground hover:text-foreground hover:underline">
+                Compare the two →
+            </a>
+        </li>
+    )
+}
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Specifications</CardTitle>
-                    <CardDescription>
-                        Each value shows its most reliable source and how many others agree: green when {NEED} or more independent sources agree, amber for two, grey for one, red when
-                        sources disagree and no majority holds. Open a value for what each source says.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Spec</TableHead>
-                            <TableHead>Value</TableHead>
-                            <TableHead className="text-right">Sources</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {groups.map(group => {
-                            const specs = RUN.specs.filter(spec => spec.group === group && !spec.id.startsWith('image_'))
-                            return [
-                                <TableRow key={group}>
-                                    <TableCell colSpan={3} className="pt-6 font-medium">
-                                        {group}
-                                    </TableCell>
-                                </TableRow>,
-                                ...specs.map(spec => <SpecRow key={spec.id} label={spec.label} tip={spec.tip} fact={facts[spec.id]} />),
-                            ]
-                        })}
-                    </TableBody>
-                </Table>
-                </CardContent>
-            </Card>
+/** One camera: its pictures, spec level and why, every spec with its sources and their words, and every page read. */
+export function CameraPage({ camera, detail }: { camera: CameraSummary; detail: CameraDetail | undefined }) {
+    const position = CAMERAS.indexOf(camera)
+    const specs = detail?.facts ?? {}
+    const money = (id: string) => price(typeof specs[id]?.value === 'number' ? (specs[id].value as number) : null)
+    const near = rivals(camera)
+    const above = CAMERAS[position - 1]
+    const below = CAMERAS[position + 1]
+    return (
+        <article className="mx-auto flex max-w-6xl flex-col gap-16 px-4 pt-4 pb-16 sm:px-8">
+            <header className="grid items-center gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+                <Pictures camera={camera} />
+                <div className="flex flex-col gap-5">
+                    <a href={BENCH.path} className="text-sm text-muted-foreground hover:underline">
+                        ← All cameras
+                    </a>
+                    <div>
+                        <h1 className="font-heading text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl">{camera.name}</h1>
+                        <p className="mt-3 text-sm text-muted-foreground">
+                            {[camera.brand, specs.type?.text, specs.mount?.text, specs.announced?.text && `released ${specs.announced.text}`].filter(Boolean).join(' · ')}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-8 gap-y-5">
+                        <LevelRing level={camera.level} rank={position + 1} />
+                        <div className="grid flex-1 grid-cols-2 gap-x-6 gap-y-4">
+                            <Stat label="MSRP" value={money('msrp')} />
+                            <Stat label="New" value={money('price_new')} />
+                            <Stat label="Used" value={money('price_used')} />
+                            <Stat label="Sensor" value={specs.mp?.text ?? '–'} sub={(specs.sensor?.text ?? '').split(' (')[0]} />
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section className="flex flex-col gap-5">
+                <div>
+                    <h2 className={TYPE.title}>Spec level</h2>
+                    <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                        What makes up its level, area by area. The white tick is the middle camera of the {CAMERAS.length}; a gold bar is at or past it.
+                    </p>
+                </div>
+                {detail?.level?.reasons?.length ? <LevelAreas reasons={detail.level.reasons} missing={detail.level.missing ?? []} /> : null}
+            </section>
+
+            <Specs camera={camera} detail={detail} />
+
+            <BodySize camera={camera} />
+
+            <section className="flex flex-col gap-5">
+                <div>
+                    <h2 className={TYPE.title}>Among the others</h2>
+                    <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Where it sits for its price: further up is more camera, further left costs less.</p>
+                </div>
+                <LevelChart focus={camera.id} />
+                {near.length > 0 && (
+                    <>
+                        <h3 className={TYPE.heading}>Nearest in price and level</h3>
+                        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                            {near.map(rival => (
+                                <Rival key={rival.slug} camera={camera} rival={rival} />
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </section>
 
             {detail?.sources?.length ? (
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Sources</CardTitle>
-                        <CardDescription>Every page read for this camera, and when it was scraped.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                    <Table>
-                        <TableBody>
-                            {detail.sources.map(source => (
-                                <TableRow key={source.url}>
-                                    <TableCell className="w-1/4">{source.title}</TableCell>
-                                    <TableCell className="max-w-0 truncate">
-                                        <a href={source.url} target="_blank" rel="noopener" className="underline">
-                                            {source.url}
-                                        </a>
-                                    </TableCell>
-                                    <TableCell className="w-1/6 text-right text-muted-foreground">{day(source.scrapedAt)}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                    </CardContent>
-                </Card>
+                <section className="flex flex-col gap-4">
+                    <div>
+                        <h2 className={TYPE.title}>Sources</h2>
+                        <p className="mt-2 text-sm text-muted-foreground">Every page read for this camera, and when it was read.</p>
+                    </div>
+                    <ul>
+                        {detail.sources.map(source => (
+                            <li key={source.url} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 border-t border-white/5 py-2 text-sm sm:grid-cols-[11rem_minmax(0,1fr)_auto]">
+                                <span>{source.title}</span>
+                                <a href={source.url} target="_blank" rel="noopener" className="col-span-2 row-start-2 truncate text-muted-foreground underline decoration-white/20 hover:text-foreground sm:col-span-1 sm:row-start-1">
+                                    {source.url}
+                                </a>
+                                <span className="text-right text-muted-foreground">{day(source.scrapedAt)}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
             ) : null}
+
+            <nav className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6 text-sm" aria-label="Other cameras">
+                {above ? (
+                    <a href={`${BENCH.path}${above.slug}/`} className="group flex flex-col gap-0.5">
+                        <span className="text-xs text-muted-foreground">← One place higher</span>
+                        <span className="font-medium group-hover:underline">{above.name}</span>
+                    </a>
+                ) : (
+                    <span />
+                )}
+                {below && (
+                    <a href={`${BENCH.path}${below.slug}/`} className="group flex flex-col items-end gap-0.5 text-right">
+                        <span className="text-xs text-muted-foreground">One place lower →</span>
+                        <span className="font-medium group-hover:underline">{below.name}</span>
+                    </a>
+                )}
+            </nav>
         </article>
     )
 }

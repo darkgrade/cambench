@@ -1,7 +1,8 @@
 // Cambench as an MCP App: a database of cameras in the manner of 99spokes, built from every source
 // read through Firecrawl, standardized to one set of specs and verified across independent sources.
-// The page browses the cameras, shows one with every value's sources, compares several, and plots spec
-// level against price; its Data tab runs the fetch (pipeline.ts) with a bar for every level.
+// The page shows the workflow's runs and starts them; the results are shown on the site
+// (darkgrade.com/cambench), which the workflow publishes to. The tools here are what a run needs:
+// the fetch (pipeline.ts), reading and adjudicating pages (reads.ts), and reviewing pictures.
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -9,7 +10,6 @@ import { readFileSync } from 'node:fs';
 import * as P from './pipeline.ts';
 import { cambench } from './workflow.ts';
 import * as R from './reads.ts';
-import { NEED } from './consensus.ts';
 
 const PAGE = 'ui://cambench/main';
 const VERSION = JSON.parse(readFileSync(new URL('../.claude-plugin/plugin.json', import.meta.url), 'utf8')).version;
@@ -31,10 +31,9 @@ const tool = (name: string, description: string, inputSchema: z.ZodRawShape, f: 
     }
   });
 
-// The list the page shows: each fact without its evidence (the camera's own view has that).
-const lean = (f: any) => ({ value: f.value, text: f.text, status: f.status, owners: f.owners, conflicts: f.conflicts?.length || 0, items: f.items });
+// What the page shows: the latest fetch's progress, what agents still have to read and review, and the corpus settings.
 function view() {
-  const r = P.latestRun(), c = P.catalog();
+  const r = P.latestRun();
   return {
     version: VERSION,
     progress: r ? P.progress(r.id) : null,
@@ -42,11 +41,7 @@ function view() {
     reading: R.queue(1).left,
     readTotal: (P.db.prepare('SELECT count(*) AS n FROM read_pages').get() as any).n + R.queue(1).left,
     busy: P.latestRun()?.state === 'running',
-    need: NEED,
-    specs: P.specList(),
-    sources: P.SOURCES.map((s) => ({ key: s.key, title: s.title, owner: s.owner, trusted: s.trusted })),
     settings: { size: P.setting('size', 400), include: P.setting('include', []), exclude: P.setting('exclude', []) },
-    cameras: c.cameras.map((x) => ({ ...x, facts: Object.fromEntries(Object.entries(x.facts).map(([k, f]) => [k, lean(f)])) })),
   };
 }
 const runId = () => {
@@ -55,7 +50,7 @@ const runId = () => {
   return r.id as number;
 };
 
-tool('cambench', 'Cambench: every camera with its standardized, source-verified specs and spec level, and the fetch\'s progress. Shows the Cambench page.', {}, () => view(), { annotations: { readOnlyHint: true }, _meta: { ui: { resourceUri: PAGE }, 'outpost/cacheSeconds': 0 } });
+tool('cambench', "Cambench: the fetch's progress, what is left to read and review, and which cameras the next fetch covers. Shows the Cambench page, where runs are started and followed.", {}, () => view(), { annotations: { readOnlyHint: true }, _meta: { ui: { resourceUri: PAGE }, 'outpost/cacheSeconds': 0 } });
 tool('progress', "The latest fetch's progress: every step, its tasks and the camera and source each is on.", {}, () => view(), { annotations: { readOnlyHint: true } });
 tool('start_fetch', 'Fetch from start (fresh: true): a new run that reads every source anew. Resume previous fetch (fresh: false): the latest run goes on from the first step that stopped, keeping every finished step and its data; failed tasks are tried again.', { fresh: z.boolean() }, async (a) => {
   await startRun({ mode: a.fresh || !P.latestRun() ? 'fetch' : 'resume', fresh: !!a.fresh });
@@ -96,7 +91,6 @@ server.registerTool('review_queue', { description: 'Cambench picture review: the
 tool('judge_picture', 'Cambench picture review: approve (ok: true) or reject a candidate picture by id, with a short reason.', { id: z.number().int(), ok: z.boolean(), why: z.string() }, (a) => P.judge(a.id, a.ok, a.why));
 tool('review_prompt', 'What the page needs to start the picture-reviewing agent.', {}, () => ({ prompt: P.REVIEW_PROMPT, title: 'Cambench: review pictures', tools: 'app', model: 'sonnet', effort: 'low' }));
 tool('save_review_run', "Remember the reviewing agent's run (or null when it is done).", { run: z.string().nullable() }, (a) => (P.setSetting('reviewRun', a.run), P.reviewState()));
-tool('pictures', "The cut-out product pictures as PNG data: every camera's thumbnails, or one camera's full size (id).", { id: z.string().optional() }, (a) => P.pictures(a.id), { annotations: { readOnlyHint: true } });
 // ---- Reading by agents (reads.ts): the queue of pages not yet read in their current form, a page's text,
 // the standard each spec is written in, submitting what a page says (quoted), more sources, the gaps.
 tool('read_queue', 'Pages no reader has read in their current form (a page read once is not queued again unless it changes). Optional camera id; part and of give one reader its share (pages whose id % of == part), so many read at once.', { limit: z.number().int().min(1).max(50).optional(), camera: z.string().optional(), part: z.number().int().min(0).optional(), of: z.number().int().min(1).optional() }, (a) => R.queue(a.limit || 5, a.camera, [], a.part || 0, a.of || 1), { annotations: { readOnlyHint: true } });
