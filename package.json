@@ -9,7 +9,8 @@
         "data": "bun scripts/build-data.ts",
         "dev": "bun scripts/build-data.ts && vite",
         "build": "bun scripts/build-data.ts && tsc --noEmit -p tsconfig.site.json && vite build && vite build --ssr src/server.tsx --outDir .server && bun scripts/prerender.ts",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "worker": "bun outpost/worker.ts"
     },
     "dependencies": {
         "@kevinschaich/components": "^0.8.2",

@@ -30,5 +30,5 @@ bun run build    # static site in dist/cambench
 `bun run data` (run by both) turns `results/` into what the views load: `public/data/` and a few small tallies
 in `src/`, none of them committed.
 
-`outpost/` is the Outpost app: its MCP server and page (the workflow's runs and what starts them), the pipeline
+`outpost/` is the Outpost plugin: the workflow and its worker (runs show on Outpost's Runs pages), the pipeline
 (`pipeline.ts`, `reads.ts`, `consensus.ts`, `level.ts`), and `workflow.ts`.

@@ -18,6 +18,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { workflows } from 'outpost-workflows';
 import * as P from './pipeline.ts';
+import * as R from './reads.ts';
 import { NEED } from './consensus.ts';
 
 const REPOSITORY = 'darkgrade/cambench';
@@ -195,6 +196,83 @@ export async function cambench() {
     },
   });
 
+  // ---- The agents' part, as tasks: each agent gets what it needs in its brief and answers in JSON; the worker
+  // checks and saves it (no tools of the app's own).
+  const json = (report: string, open = '[', close = ']') => {
+    const a = report.indexOf(open), b = report.lastIndexOf(close);
+    if (a < 0 || b < a) throw new Error(`the agent answered without JSON: ${report.slice(0, 200)}`);
+    return JSON.parse(report.slice(a, b + 1));
+  };
+  const guide = () => JSON.stringify(R.guide());
+
+  // One page read against the spec guide: what it states about the camera, each with the words that state it.
+  const readTask = task<{ page: number; name: string; camera: string; source: string; url: string }, { accepted: number; summary: string }>({
+    name: 'read',
+    timeout: '30m',
+    retries: 1,
+    concurrency: { key: 'reader', max: 6 },
+    fn: async (p, context) => {
+      let text = '';
+      for (let offset = 0; ; offset += 30000) {
+        const chunk = R.pageText(p.page, offset);
+        text += chunk.text;
+        if (!chunk.more) break;
+      }
+      const brief = (extra: string) => `Read one saved web page about the ${p.name} (${p.camera}) and record exactly what it says, for Cambench, a camera spec database. Page: ${p.source}, ${p.url}.
+For every spec the page states about the ${p.name} body itself, give its value as JSON exactly as the spec guide gives it, in the units the page uses ({"n": 24.66, "unit": "oz"} is fine), and the exact words on the page that state it (its figures as the page writes them, "..." between separate parts). Follow each definition exactly: a figure for a different measure is not that spec's value (mention it in "note" or leave it out). Only this camera, never another model the page compares or mentions, nor lenses, accessories or kits. An absence (false, "None", "No") only where the page says so, never from silence.
+Reply with only a JSON array: [{"spec": "<id>", "value": <json>, "quote": "<words>", "note": "<optional>"}], or [] when the page says nothing about this camera.${extra}
+
+The spec guide:
+${guide()}
+
+The page:
+${text}`;
+      const title = `Cambench: read ${p.name} (${p.source})`;
+      let values = json(await context.agent({ prompt: brief(''), title, model: 'sonnet', effort: 'low' }));
+      let out = R.submit(p.page, values);
+      if (out.refused.length) {
+        const again = `\n\nYour last answer was ${JSON.stringify(values)}; these entries were refused: ${JSON.stringify(out.refused)}. Fix them and give every value again.`;
+        values = json(await context.agent({ prompt: brief(again), title, model: 'sonnet', effort: 'low' }));
+        out = R.submit(p.page, values);
+      }
+      return { accepted: out.accepted, summary: `${out.accepted} values${out.refused.length ? `, ${out.refused.length} refused` : ''}` };
+    },
+  });
+
+  // One disagreement between sources settled: each reading right, an error, or another measure than the definition.
+  const adjudicateTask = task<{ item: any }, { summary: string }>({
+    name: 'adjudicate',
+    timeout: '20m',
+    retries: 1,
+    concurrency: { key: 'reader', max: 6 },
+    fn: async ({ item }, context) => {
+      const prompt = `Sources disagree about the ${item.name}'s ${item.spec}. The definition: ${item.definition}
+The readings, grouped by value: ${JSON.stringify(item.groups)}
+For each reading (by its sha), decide: right (it states this spec as defined), error (a typo, a copied figure, another model's figure) or other (another measure than the definition counts). Look at the pages if it helps.
+Reply with only a JSON array: [{"sha": "<sha>", "verdict": "right" | "error" | "other", "note": "<short reason>"}].`;
+      const verdicts = json(await context.agent({ prompt, title: `Cambench: ${item.name} ${item.spec}`, model: 'sonnet', effort: 'low' }));
+      R.judge(item.camera, item.spec, item.key, verdicts);
+      return { summary: `${verdicts.length} readings judged` };
+    },
+  });
+
+  // Candidate product pictures approved or rejected, a few at a time, until none wait.
+  const reviewTask = task<{ batch: number }, { judged: number; summary: string }>({
+    name: 'review',
+    timeout: '30m',
+    retries: 1,
+    fn: async (_input, context) => {
+      const q = P.reviewQueue(6);
+      if (!q.items.length) return { judged: 0, summary: 'Nothing to review' };
+      const prompt = `${P.REVIEW_PROMPT.split('Call review_queue')[0]}Look at each candidate picture (open the file; grey is where it is transparent) and decide.
+${q.items.map((it: any) => `Candidate ${it.id}: ${it.camera}, ${it.side} view wanted, ${it.size} px, from ${it.from}; the file: ${it.look}`).join('\n')}
+Reply with only a JSON array: [{"id": <id>, "ok": true | false, "why": "<short reason>"}].`;
+      const verdicts = json(await context.agent({ prompt, title: 'Cambench: review pictures', model: 'sonnet', effort: 'low' }));
+      for (const v of verdicts) P.judge(Number(v.id), !!v.ok, String(v.why || ''));
+      return { judged: verdicts.length, summary: `${verdicts.length} pictures judged, ${q.left - verdicts.length} left` };
+    },
+  });
+
   const run = task<RunInput, { run: number; summary: string }>({
     name: 'cambench',
     timeout: '72h',
@@ -205,12 +283,28 @@ export async function cambench() {
       if (mode !== 'fetch' && mode !== 'publish') P.prepare(id, mode);
       const steps = mode === 'publish' ? [] : P.DEFS;
       await context.plan([
-        ...steps.map((d) => ({ key: d.key, label: d.title, kind: 'step' })),
+        ...steps.flatMap((d) => [
+          { key: d.key, label: d.title, kind: 'step' },
+          ...(d.key === 'scrape' ? [{ key: 'read', label: 'Read every page', kind: 'read' }, { key: 'adjudicate', label: 'Settle disagreements', kind: 'adjudicate' }] : []),
+          ...(d.key === 'images' ? [{ key: 'review', label: 'Review pictures', kind: 'review' }] : []),
+        ]),
         { key: 'export', label: 'Export results', kind: 'export' },
         { key: 'publish', label: 'Publish', kind: 'publish' },
       ]);
       const states: string[] = [];
-      for (const d of steps) states.push((await stepTask.run({ run: id, key: d.key }, { label: d.title, key: d.key })).state);
+      for (const d of steps) {
+        states.push((await stepTask.run({ run: id, key: d.key }, { label: d.title, key: d.key })).state);
+        if (d.key === 'scrape') {
+          // Every page not read in its current form, each by its own reader; then each disagreement settled.
+          const pages = R.queue(100000).pages;
+          await Promise.all(pages.map((p: any) => readTask.run(p, { label: `Read ${p.name} (${p.source})`, key: 'read' }).catch(() => null)));
+          const disputed = R.conflicts().items;
+          await Promise.all(disputed.map((item: any) => adjudicateTask.run({ item }, { label: `${item.name}: ${item.spec}`, key: 'adjudicate' }).catch(() => null)));
+        }
+        if (d.key === 'images')
+          for (let batch = 0; batch < 200 && P.reviewQueue(1).items.length; batch++)
+            if (!(await reviewTask.run({ batch }, { label: `Review pictures ${batch + 1}`, key: 'review' })).judged) break;
+      }
       if (steps.length) P.finishRun(id);
       const exported = await exportTask.run({ run: id }, { label: 'Export results', key: 'export' });
       const published = await publishTask.run({ run: id }, { label: 'Publish', key: 'publish' });
