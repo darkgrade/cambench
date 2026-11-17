@@ -1,7 +1,7 @@
 {
   "benchmark": "cambench",
   "version": 1,
-  "date": "2026-11-17T22:45:20.257Z",
+  "date": "2026-11-17T22:52:31.293Z",
   "run": {},
   "need": 3,
   "specs": [
@@ -1419,7 +1419,8 @@
       "level": 34,
       "coverage": 100,
       "image": {
-        "back": "cameras/fujifilm-xt30iii-back.webp"
+        "back": "cameras/fujifilm-xt30iii-back.webp",
+        "front": "cameras/fujifilm-xt30iii-front.webp"
       },
       "specs": {
         "sensor": {
