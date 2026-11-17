@@ -1,7 +1,7 @@
 {
   "benchmark": "cambench",
   "version": 1,
-  "date": "2026-11-17T21:33:53.968Z",
+  "date": "2026-11-17T22:45:20.257Z",
   "run": {},
   "need": 3,
   "specs": [
@@ -425,8 +425,8 @@
           "text": "Yes"
         },
         "announced": {
-          "value": "2025-11-05",
-          "text": "2025-11-05"
+          "value": "2025-11-06",
+          "text": "2025-11-06"
         }
       }
     },
@@ -437,7 +437,7 @@
       "brand": "Sigma",
       "rank": 2,
       "price": 2199,
-      "level": 44,
+      "level": 43,
       "coverage": 100,
       "image": {
         "back": "cameras/sigma-fp2-back.webp",
@@ -860,7 +860,7 @@
       "rank": 11,
       "price": 1498,
       "level": 63,
-      "coverage": 82,
+      "coverage": 94,
       "image": {
         "back": "cameras/panasonic-g9ii-back.webp",
         "front": "cameras/panasonic-g9ii-front.webp"
@@ -1099,7 +1099,7 @@
       "brand": "Panasonic",
       "rank": 16,
       "price": 1798,
-      "level": 66,
+      "level": 68,
       "coverage": 76,
       "image": {
         "front": "cameras/panasonic-gh7-front.webp"
@@ -1186,7 +1186,7 @@
       "brand": "Panasonic",
       "rank": 18,
       "price": 2898,
-      "level": 71,
+      "level": 68,
       "coverage": 100,
       "image": {
         "back": "cameras/panasonic-s1ii-back.webp",
@@ -1233,7 +1233,8 @@
       "level": 46,
       "coverage": 82,
       "image": {
-        "front": "cameras/panasonic-s9-front.webp"
+        "front": "cameras/panasonic-s9-front.webp",
+        "back": "cameras/panasonic-s9-back.webp"
       },
       "specs": {
         "sensor": {
@@ -1510,8 +1511,8 @@
       "brand": "Hasselblad",
       "rank": 25,
       "price": 7799,
-      "level": 55,
-      "coverage": 74,
+      "level": 51,
+      "coverage": 82,
       "image": {
         "back": "cameras/hasselblad-x2dii100c-back.webp",
         "front": "cameras/hasselblad-x2dii100c-front.webp"
@@ -1554,7 +1555,7 @@
       "brand": "Canon",
       "rank": 26,
       "price": 1999,
-      "level": 64,
+      "level": 62,
       "coverage": 100,
       "image": {
         "front": "cameras/canon-r6ii-front.webp"
@@ -1604,7 +1605,8 @@
       "level": 47,
       "coverage": 100,
       "image": {
-        "back": "cameras/canon-r8-back.webp"
+        "back": "cameras/canon-r8-back.webp",
+        "front": "cameras/canon-r8-front.webp"
       },
       "specs": {
         "sensor": {
@@ -1691,7 +1693,7 @@
       "brand": "Fujifilm",
       "rank": 29,
       "price": 1699,
-      "level": 44,
+      "level": 42,
       "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-xe5-back.webp",
@@ -1702,9 +1704,9 @@
           "value": {
             "format": "APS-C",
             "w": 23.5,
-            "h": 15.7
+            "h": 15.6
           },
-          "text": "APS-C (23.5 × 15.7 mm)"
+          "text": "APS-C (23.5 × 15.6 mm)"
         },
         "mp": {
           "value": 40.2,
@@ -1740,7 +1742,7 @@
       "rank": 30,
       "price": 1600,
       "level": 44,
-      "coverage": 88,
+      "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-xt50-back.webp",
         "front": "cameras/fujifilm-xt50-front.webp"
@@ -1787,7 +1789,7 @@
       "brand": "Fujifilm",
       "rank": 31,
       "price": 899,
-      "level": 30,
+      "level": 31,
       "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-xm5-back.webp",
@@ -1883,7 +1885,7 @@
       "brand": "Nikon",
       "rank": 33,
       "price": 1597,
-      "level": 63,
+      "level": 59,
       "coverage": 100,
       "image": {
         "back": "cameras/nikon-z5ii-back.webp",
@@ -2125,7 +2127,8 @@
       "level": 35,
       "coverage": 100,
       "image": {
-        "back": "cameras/canon-r50-back.webp"
+        "back": "cameras/canon-r50-back.webp",
+        "front": "cameras/canon-r50-front.webp"
       },
       "specs": {
         "sensor": {
@@ -2169,7 +2172,7 @@
       "brand": "Canon",
       "rank": 39,
       "price": 1099,
-      "level": 35,
+      "level": 36,
       "coverage": 100,
       "image": {
         "back": "cameras/canon-r10-back.webp",
@@ -2217,7 +2220,7 @@
       "brand": "Canon",
       "rank": 40,
       "price": 1549,
-      "level": 61,
+      "level": 62,
       "coverage": 100,
       "image": {
         "back": "cameras/canon-r7-back.webp",
@@ -2500,7 +2503,8 @@
       "level": 77,
       "coverage": 82,
       "image": {
-        "back": "cameras/canon-r5ii-back.webp"
+        "back": "cameras/canon-r5ii-back.webp",
+        "front": "cameras/canon-r5ii-front.webp"
       },
       "specs": {
         "sensor": {
@@ -2547,7 +2551,8 @@
       "level": null,
       "coverage": 42,
       "image": {
-        "back": "cameras/pixii-max-back.webp"
+        "back": "cameras/pixii-max-back.webp",
+        "front": "cameras/pixii-max-front.webp"
       },
       "specs": {
         "sensor": {
@@ -2590,7 +2595,8 @@
       "level": 34,
       "coverage": 100,
       "image": {
-        "back": "cameras/sony-zve10ii-back.webp"
+        "back": "cameras/sony-zve10ii-back.webp",
+        "front": "cameras/sony-zve10ii-front.webp"
       },
       "specs": {
         "sensor": {
@@ -2634,8 +2640,8 @@
       "brand": "Nikon",
       "rank": 49,
       "price": 1997,
-      "level": 72,
-      "coverage": 94,
+      "level": 71,
+      "coverage": 100,
       "image": {
         "back": "cameras/nikon-z6iii-back.webp",
         "front": "cameras/nikon-z6iii-front.webp"
@@ -2662,8 +2668,8 @@
           "text": "Mirrorless"
         },
         "burst": {
-          "value": 20,
-          "text": "20 fps"
+          "value": 60,
+          "text": "60 fps"
         },
         "ibis": {
           "value": true,
@@ -2682,8 +2688,8 @@
       "brand": "Fujifilm",
       "rank": 50,
       "price": 5699,
-      "level": 60,
-      "coverage": 94,
+      "level": 59,
+      "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-gfx100sii-back.webp",
         "front": "cameras/fujifilm-gfx100sii-front.webp"
@@ -2730,7 +2736,7 @@
       "brand": "Leica",
       "rank": 51,
       "price": 7485,
-      "level": 71,
+      "level": 67,
       "coverage": 100,
       "image": {
         "back": "cameras/leica-sl3-back.webp",
@@ -2781,7 +2787,8 @@
       "level": 62,
       "coverage": 100,
       "image": {
-        "back": "cameras/om-system-om1ii-back.webp"
+        "back": "cameras/om-system-om1ii-back.webp",
+        "front": "cameras/om-system-om1ii-front.webp"
       },
       "specs": {
         "sensor": {
@@ -2889,7 +2896,7 @@
       "brand": "Sony",
       "rank": 55,
       "price": 6398,
-      "level": 74,
+      "level": 72,
       "coverage": 100,
       "image": {
         "back": "cameras/sony-a9iii-back.webp",
@@ -2985,7 +2992,7 @@
       "brand": "Sony",
       "rank": 57,
       "price": 2098,
-      "level": 48,
+      "level": 46,
       "coverage": 100,
       "image": {
         "back": "cameras/sony-a7cii-back.webp",
@@ -3033,8 +3040,8 @@
       "brand": "Sony",
       "rank": 58,
       "price": 2998,
-      "level": 50,
-      "coverage": 100,
+      "level": 49,
+      "coverage": 92,
       "image": {
         "back": "cameras/sony-a7cr-back.webp",
         "front": "cameras/sony-a7cr-front.webp"
@@ -3125,8 +3132,8 @@
       "brand": "Fujifilm",
       "rank": 60,
       "price": 1499,
-      "level": 49,
-      "coverage": 94,
+      "level": 47,
+      "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-xs20-back.webp",
         "front": "cameras/fujifilm-xs20-front.webp"
@@ -3173,7 +3180,7 @@
       "brand": "Canon",
       "rank": 61,
       "price": 429,
-      "level": 22,
+      "level": 24,
       "coverage": 100,
       "image": {
         "back": "cameras/canon-r100-back.webp",
@@ -3320,7 +3327,8 @@
       "level": 38,
       "coverage": 100,
       "image": {
-        "back": "cameras/sony-zve1-back.webp"
+        "back": "cameras/sony-zve1-back.webp",
+        "front": "cameras/sony-zve1-front.webp"
       },
       "specs": {
         "sensor": {
@@ -3412,7 +3420,7 @@
       "brand": "Fujifilm",
       "rank": 66,
       "price": 2299,
-      "level": 66,
+      "level": 64,
       "coverage": 100,
       "image": {
         "back": "cameras/fujifilm-xh2-back.webp",
@@ -3599,7 +3607,7 @@
       "brand": "Nikon",
       "rank": 70,
       "price": 4797,
-      "level": 73,
+      "level": 75,
       "coverage": 100,
       "image": {
         "back": "cameras/nikon-z9-back.webp",
@@ -3647,7 +3655,7 @@
       "brand": "Sony",
       "rank": 71,
       "price": 1998,
-      "level": 54,
+      "level": 55,
       "coverage": 100,
       "image": {
         "back": "cameras/sony-a7iv-back.webp",
@@ -3698,7 +3706,8 @@
       "level": 22,
       "coverage": 100,
       "image": {
-        "back": "cameras/sony-zve10-back.webp"
+        "back": "cameras/sony-zve10-back.webp",
+        "front": "cameras/sony-zve10-front.webp"
       },
       "specs": {
         "sensor": {
@@ -3742,8 +3751,8 @@
       "brand": "Nikon",
       "rank": 73,
       "price": 757,
-      "level": 28,
-      "coverage": 92,
+      "level": 27,
+      "coverage": 100,
       "image": {
         "back": "cameras/nikon-zfc-back.webp",
         "front": "cameras/nikon-zfc-front.webp"
@@ -3834,8 +3843,8 @@
       "brand": "Canon",
       "rank": 75,
       "price": 4399,
-      "level": 74,
-      "coverage": 94,
+      "level": 75,
+      "coverage": 100,
       "image": {
         "front": "cameras/canon-r3-front.webp"
       },
@@ -3881,8 +3890,8 @@
       "brand": "Canon",
       "rank": 76,
       "price": 4999,
-      "level": 50,
-      "coverage": 76,
+      "level": 52,
+      "coverage": 82,
       "image": {
         "front": "cameras/canon-1dxiii-front.webp"
       },
@@ -3924,10 +3933,11 @@
       "brand": "Sigma",
       "rank": 77,
       "price": 2499,
-      "level": 31,
+      "level": 32,
       "coverage": 100,
       "image": {
-        "back": "cameras/sigma-fpl-back.webp"
+        "back": "cameras/sigma-fpl-back.webp",
+        "front": "cameras/sigma-fpl-front.webp"
       },
       "specs": {
         "sensor": {
@@ -4390,10 +4400,11 @@
       "brand": "Sony",
       "rank": 87,
       "price": 848,
-      "level": 21,
+      "level": 22,
       "coverage": 100,
       "image": {
-        "back": "cameras/sony-a6100-back.webp"
+        "back": "cameras/sony-a6100-back.webp",
+        "front": "cameras/sony-a6100-front.webp"
       },
       "specs": {
         "sensor": {
@@ -4435,7 +4446,10 @@
       "price": 799,
       "level": 30,
       "coverage": 100,
-      "image": {},
+      "image": {
+        "back": "cameras/canon-rp-back.webp",
+        "front": "cameras/canon-rp-front.webp"
+      },
       "specs": {
         "sensor": {
           "value": {
@@ -4481,7 +4495,8 @@
       "level": 24,
       "coverage": 100,
       "image": {
-        "back": "cameras/sony-a6400-back.webp"
+        "back": "cameras/sony-a6400-back.webp",
+        "front": "cameras/sony-a6400-front.webp"
       },
       "specs": {
         "sensor": {
@@ -4709,7 +4724,7 @@
       "brand": "Canon",
       "rank": 94,
       "price": 1799,
-      "level": 29,
+      "level": 25,
       "coverage": 92,
       "image": {
         "back": "cameras/canon-5div-back.webp",
@@ -4757,7 +4772,7 @@
       "brand": "Canon",
       "rank": 95,
       "price": 2999,
-      "level": 35,
+      "level": 31,
       "coverage": 100,
       "image": {
         "front": "cameras/canon-1dxii-front.webp"
