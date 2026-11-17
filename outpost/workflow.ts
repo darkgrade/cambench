@@ -208,10 +208,22 @@ export async function cambench() {
 
   // ---- The agents' part, as tasks: each agent gets what it needs in its brief and answers in JSON; the worker
   // checks and saves it (no tools of the app's own).
+  // The JSON in an agent's answer: a fenced block if there is one, else the widest span that parses.
   const json = (report: string, open = '[', close = ']') => {
-    const a = report.indexOf(open), b = report.lastIndexOf(close);
-    if (a < 0 || b < a) throw new Error(`the agent answered without JSON: ${report.slice(0, 200)}`);
-    return JSON.parse(report.slice(a, b + 1));
+    const fenced = report.match(/```(?:json)?\s*([\s\S]*?)```/);
+    const text = fenced && fenced[1].trim().startsWith(open) ? fenced[1] : report;
+    const ends = [...text.matchAll(new RegExp(`\\${close}`, 'g'))].map((m) => m.index!).reverse();
+    let best: { length: number; value: any } | null = null;
+    for (let a = text.indexOf(open); a >= 0; a = text.indexOf(open, a + 1))
+      for (const b of ends) {
+        if (b < a || (best && b + 1 - a <= best.length)) break;
+        try {
+          best = { length: b + 1 - a, value: JSON.parse(text.slice(a, b + 1)) };
+          break;
+        } catch {}
+      }
+    if (best) return best.value;
+    throw new Error(`the agent answered without readable JSON: ${report.slice(0, 300)}`);
   };
   const guide = () => JSON.stringify(R.guide());
 
@@ -302,13 +314,14 @@ Reply with only a JSON array: [{"id": <id>, "ok": true | false, "why": "<short r
         { key: 'publish', label: 'Publish', kind: 'publish' },
       ]);
       const states: string[] = [];
+      let failures = 0; // pages not read and disagreements not settled
       for (const d of steps) {
         states.push((await stepTask.run({ run: id, key: d.key }, { label: d.title, key: d.key })).state);
         if (d.key === 'scrape') {
           // Every page not read in its current form, each by its own reader; then each disagreement settled.
           // Fifty children at a time: hundreds started at once overwhelm the engine's admin service.
           const inBatches = async <T>(items: T[], each: (item: T) => Promise<unknown>) => {
-            for (let at = 0; at < items.length; at += 50) await Promise.all(items.slice(at, at + 50).map((item) => each(item).catch(() => null)));
+            for (let at = 0; at < items.length; at += 50) await Promise.all(items.slice(at, at + 50).map((item) => each(item).catch(() => void failures++)));
           };
           const pages = R.queue(100000).pages;
           await inBatches(pages, (p: any) => readTask.run(p, { label: `Read ${p.name} (${p.source})`, key: 'read' }));
@@ -323,6 +336,7 @@ Reply with only a JSON array: [{"id": <id>, "ok": true | false, "why": "<short r
       const exported = await exportTask.run({ run: id }, { label: 'Export results', key: 'export' });
       const published = await publishTask.run({ run: id }, { label: 'Publish', key: 'publish' });
       const partly = states.filter((s) => s !== 'done').length;
+      if (failures) throw new Error(`${failures} pages or disagreements failed (the rest is published: ${published.summary}); Retry what failed takes them again`);
       return { run: id, summary: `${exported.summary}${partly ? ` · ${partly} steps partly done` : ''} · ${published.summary}` };
     },
   });
