@@ -182,9 +182,23 @@ export async function cambench() {
         await context.log(`Pictures ${index + 1} of ${batches.length}`);
         commit = (await context.publish({ repo: REPOSITORY, files: batch, message: 'Update camera pictures' })).commit ?? commit;
       }
+      // Then the results: each camera's file in commits of about 2 MB (the engine takes at most 4 MB a message), and
+      // last the index that names them, so the site never names a file that is not there yet.
+      const files: Record<string, string>[] = [{}];
+      size = 0;
+      for (const [path, text] of Object.entries(file.cameraFiles as Record<string, string>)) {
+        if (size + text.length > 2_000_000 && Object.keys(files.at(-1)!).length) (files.push({}), (size = 0));
+        files.at(-1)![path] = text;
+        size += text.length;
+      }
+      for (const [index, batch] of files.entries()) {
+        if (!Object.keys(batch).length) continue;
+        await context.log(`Results: camera files ${index + 1} of ${files.length}`);
+        commit = (await context.publish({ repo: REPOSITORY, files: batch, message: 'Update camera results' })).commit ?? commit;
+      }
       const published = await context.publish({
         repo: REPOSITORY,
-        files: { ...file.cameraFiles, 'results/cambench.json': `${JSON.stringify(file.index, null, 2)}\n` },
+        files: { 'results/cambench.json': `${JSON.stringify(file.index, null, 2)}\n` },
         message: 'Update results',
       });
       commit = published.commit ?? commit;
