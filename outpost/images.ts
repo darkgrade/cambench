@@ -155,7 +155,7 @@ export function candidate(urls: string | string[], dir: string, stem: string, wh
 export function thumbUrl(file: string) {
   if (!existsSync(file)) return null;
   const small = file.replace(/\.png$/, '.webp');
-  if (!existsSync(small)) run('ffmpeg', ['-v', 'error', '-y', '-i', file, '-c:v', 'libwebp', '-quality', '78', small]);
+  if (!existsSync(small)) run('cwebp', ['-quiet', '-q', '78', file, '-o', small]); // the Mac's FFmpeg has no WebP encoder
   return existsSync(small) ? `data:image/webp;base64,${readFileSync(small).toString('base64')}` : dataUrl(file);
 }
 export const dataUrl = (file: string) => (existsSync(file) ? `data:image/png;base64,${readFileSync(file).toString('base64')}` : null);

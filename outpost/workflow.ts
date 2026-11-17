@@ -12,10 +12,9 @@
 //
 // Each step is the pipeline's own (pipeline.ts keeps every task and its output in SQLite): a stopped run goes
 // on where it stopped, and only failed tasks are redone.
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import sharp from 'sharp';
 import { workflows } from 'outpost-workflows';
 import * as P from './pipeline.ts';
 import * as R from './reads.ts';
@@ -122,14 +121,11 @@ export function results() {
   return { file, images };
 }
 
-// A picture as the site serves it: WebP, at most 1200 px wide, transparency kept.
-// (Written to a file: WebP's header holds its size, which ffmpeg can only fill in on a seekable output.)
-export function webp(file: string): string {
-  const out = join(mkdtempSync(join(tmpdir(), 'cambench-')), 'picture.webp');
-  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', file, '-vf', "scale='min(1200,iw)':-2", '-c:v', 'libwebp', '-quality', '82', out]);
-  const data = readFileSync(out).toString('base64');
-  rmSync(dirname(out), { recursive: true, force: true });
-  return data;
+// A picture as the site serves it: WebP, at most 1200 px wide, transparency kept (sharp: the Mac's FFmpeg has no
+// WebP encoder).
+export async function webp(file: string): Promise<string> {
+  const data = await sharp(file).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
+  return data.toString('base64');
 }
 
 export async function cambench() {
@@ -175,7 +171,7 @@ export async function cambench() {
       const batches: Record<string, { base64: string }>[] = [{}];
       let size = 0;
       for (const [path, source] of Object.entries(images)) {
-        const base64 = webp(source);
+        const base64 = await webp(source);
         if (size + base64.length > 2_000_000 && Object.keys(batches.at(-1)!).length) (batches.push({}), (size = 0));
         batches.at(-1)![path] = { base64 };
         size += base64.length;
