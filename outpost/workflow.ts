@@ -306,10 +306,14 @@ Reply with only a JSON array: [{"id": <id>, "ok": true | false, "why": "<short r
         states.push((await stepTask.run({ run: id, key: d.key }, { label: d.title, key: d.key })).state);
         if (d.key === 'scrape') {
           // Every page not read in its current form, each by its own reader; then each disagreement settled.
+          // Fifty children at a time: hundreds started at once overwhelm the engine's admin service.
+          const inBatches = async <T>(items: T[], each: (item: T) => Promise<unknown>) => {
+            for (let at = 0; at < items.length; at += 50) await Promise.all(items.slice(at, at + 50).map((item) => each(item).catch(() => null)));
+          };
           const pages = R.queue(100000).pages;
-          await Promise.all(pages.map((p: any) => readTask.run(p, { label: `Read ${p.name} (${p.source})`, key: 'read' }).catch(() => null)));
+          await inBatches(pages, (p: any) => readTask.run(p, { label: `Read ${p.name} (${p.source})`, key: 'read' }));
           const disputed = R.conflicts().items;
-          await Promise.all(disputed.map((item: any) => adjudicateTask.run({ item }, { label: `${item.name}: ${item.spec}`, key: 'adjudicate' }).catch(() => null)));
+          await inBatches(disputed, (item: any) => adjudicateTask.run({ item }, { label: `${item.name}: ${item.spec}`, key: 'adjudicate' }));
         }
         if (d.key === 'images')
           for (let batch = 0; batch < 200 && P.reviewQueue(1).items.length; batch++)
