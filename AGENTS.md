@@ -19,5 +19,8 @@ README.md first.
   own page (`src/entry.tsx`, `src/pages/camera.tsx`) loads separately and reads its detail embedded in the page.
   Camera page addresses, titles and descriptions are indexed: change the page, never those.
 - `src/kit/` is shared with Toolbench and Voicebench, copied verbatim: change it there too, or not at all.
+- The results are a schema.org `Dataset` (`structuredData` in `scripts/prerender.ts`, the same in all three benches):
+  MIT licensed like the code (`LICENSE`), described by `BENCH.dataset`, with `results/<bench>.json` copied to
+  `data/<bench>.json` beside the pages as its download. Keep it complete for Google's Dataset rich results.
 - Sources ruled out for unreliable data: Digicamdb, Camera Decision, Versus, DXOMARK, PXLMAG (Kevin, 2026-11-05).
 - A page fetched in the last 30 days is never fetched again; its saved Markdown is reused.

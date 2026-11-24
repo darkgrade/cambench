@@ -15,6 +15,12 @@ export const BENCH = {
     origin: 'https://darkgrade.com',
     /** What it is, in search terms: names like Toolbench are shared with academic benchmarks. */
     subject: 'Camera spec database, verified across sources',
+    /** The results as a schema.org Dataset (scripts/prerender.ts): a fuller description than the tagline, for search. */
+    dataset: {
+        description:
+            "Cambench by Darkgrade is a database of camera bodies' specs, read from the makers' own sites, B&H, DPReview, launch news, Wikipedia, retailers and more, standardized to one dictionary of about 45 specs and verified where independent sources agree. Each camera has its price, sensor, resolution, video, burst, viewfinder, size and weight, with the sources that state each value and the words it was read from, and a spec level from 0 to 100 on fixed scales.",
+        keywords: ['camera specs', 'camera database', 'camera comparison', 'mirrorless cameras', 'DSLR', 'sensor size', 'spec verification'],
+    },
 }
 
 /** The overview's views; each after the first is its own page at BENCH.path + id. */

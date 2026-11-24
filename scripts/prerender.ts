@@ -4,7 +4,7 @@
  * Darkgrade card. Runs after `vite build` and the server build; static output only.
  */
 import { Resvg } from '@resvg/resvg-js'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
 import satori from 'satori'
@@ -24,7 +24,15 @@ const server = (await import(join(root, '.server', 'server.js'))) as {
     render: (path: string) => string
     pageData: (path: string) => unknown
     routes: () => Route[]
-    BENCH: { name: string; tagline: string; repository: string; path: string; origin: string; subject: string }
+    BENCH: {
+        name: string
+        tagline: string
+        repository: string
+        path: string
+        origin: string
+        subject: string
+        dataset: { description: string; keywords: string[] }
+    }
 }
 const output = join(root, 'dist', server.BENCH.path)
 const template = readFileSync(join(output, 'index.html'), 'utf8')
@@ -73,20 +81,38 @@ async function card(route: Route): Promise<Buffer> {
 
 const DARKGRADE = { '@type': 'Organization', name: 'Darkgrade', url: 'https://darkgrade.com/' }
 const home = `${server.BENCH.origin}${server.BENCH.path}`
+const slug = server.BENCH.path.replaceAll('/', '')
+const LICENSE = 'https://opensource.org/licenses/MIT'
 
-/** Schema.org data: the bench is a Dataset by Darkgrade with its code on GitHub; each other page is part of it. */
+// The published results file (results/<bench>.json), served beside the pages as the Dataset's download.
+const resultsFile = join(root, 'results', `${slug}.json`)
+const results = JSON.parse(readFileSync(resultsFile, 'utf8')) as { version?: number | string; date?: string }
+const download = `data/${slug}.json`
+mkdirSync(join(output, 'data'), { recursive: true })
+copyFileSync(resultsFile, join(output, download))
+
+/**
+ * Schema.org data: the bench is a Dataset by Darkgrade under the MIT licence, with its code on GitHub and its
+ * results file to download; each other page is part of it. Google's Dataset guidelines:
+ * https://developers.google.com/search/docs/appearance/structured-data/dataset
+ */
 function structuredData(route: Route, url: string): string {
     const dataset = {
         '@type': 'Dataset',
         '@id': `${home}#dataset`,
         name: `${server.BENCH.name} by Darkgrade`,
         alternateName: server.BENCH.subject,
-        description: server.BENCH.tagline,
+        description: server.BENCH.dataset.description,
         url: home,
+        sameAs: `https://github.com/${server.BENCH.repository}`,
+        keywords: server.BENCH.dataset.keywords,
+        license: LICENSE,
+        isAccessibleForFree: true,
         creator: DARKGRADE,
         publisher: DARKGRADE,
-        isAccessibleForFree: true,
-        sameAs: `https://github.com/${server.BENCH.repository}`,
+        ...(results.version === undefined ? {} : { version: String(results.version) }),
+        ...(results.date ? { dateModified: results.date } : {}),
+        distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: `${home}${download}` }],
     }
     if (!route.path) return JSON.stringify({ '@context': 'https://schema.org', ...dataset })
     return JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: route.title, description: route.description, url, isPartOf: dataset, publisher: DARKGRADE })
