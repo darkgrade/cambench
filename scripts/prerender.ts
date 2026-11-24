@@ -82,7 +82,8 @@ async function card(route: Route): Promise<Buffer> {
 const DARKGRADE = { '@type': 'Organization', name: 'Darkgrade', url: 'https://darkgrade.com/' }
 const home = `${server.BENCH.origin}${server.BENCH.path}`
 const slug = server.BENCH.path.replaceAll('/', '')
-const LICENSE = 'https://opensource.org/licenses/MIT'
+// The published data is CC BY 4.0 (LICENSE-DATA); the code is MIT (LICENSE).
+const LICENSE = 'https://creativecommons.org/licenses/by/4.0/'
 
 // The published results file (results/<bench>.json), served beside the pages as the Dataset's download.
 const resultsFile = join(root, 'results', `${slug}.json`)
@@ -92,7 +93,7 @@ mkdirSync(join(output, 'data'), { recursive: true })
 copyFileSync(resultsFile, join(output, download))
 
 /**
- * Schema.org data: the bench is a Dataset by Darkgrade under the MIT licence, with its code on GitHub and its
+ * Schema.org data: the bench is a Dataset by Darkgrade under CC BY 4.0, with its code on GitHub and its
  * results file to download; each other page is part of it. Google's Dataset guidelines:
  * https://developers.google.com/search/docs/appearance/structured-data/dataset
  */

@@ -1,0 +1,17 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+The code in this repository is MIT licensed (see LICENSE). The published data is not code and is licensed
+separately, under CC BY 4.0:
+
+- everything in results/
+- the same results as published on the site, at https://darkgrade.com/cambench/data/cambench.json
+
+You may share and adapt the data for any purpose, including commercially, as long as you give appropriate
+credit, link to the license and say if you changed it. Credit it as:
+
+    Cambench by Darkgrade (https://darkgrade.com/cambench/), CC BY 4.0
+
+Copyright (c) 2026 Darkgrade
+
+License: https://creativecommons.org/licenses/by/4.0/
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
